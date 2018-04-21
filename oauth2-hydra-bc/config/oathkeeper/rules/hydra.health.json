@@ -1,0 +1,13 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:health:status",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "http://localhost:4455//health/status",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "http://localhost:4444/"
+    },
+  }
+]

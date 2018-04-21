@@ -1,0 +1,18 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:policies:list",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "http://localhost:4455/policies",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "http://localhost:4444/"
+    },
+    "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies",
+    "requiredAction": "${HYDRA_ACTION_PREFIX}list",
+    "requiredScopes": [
+      "hydra.policies"
+    ]
+  }
+]
