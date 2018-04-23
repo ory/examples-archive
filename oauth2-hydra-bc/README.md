@@ -21,3 +21,5 @@ DO not expose ports other than 4455, it's only for testing here
 1. Provide root client / secret as env vars
 2. Let it run
 3. Done
+
+The old endpoints still work but recommended to update

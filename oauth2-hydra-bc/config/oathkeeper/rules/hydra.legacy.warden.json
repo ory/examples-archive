@@ -2,12 +2,12 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:warden:allowed",
     "matchesMethods": [
-      "GET"
+      "POST"
     ],
-    "matchesUrl": "http://localhost:4455/warden/allowed",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/allowed",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/warden/subjects/allowed",
+      "url": "${KETO_URL}/warden/subjects/authorize",
       "stripPath": "/warden/allowed"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:allowed",
@@ -19,12 +19,12 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:warden:allowed",
     "matchesMethods": [
-      "GET"
+      "POST"
     ],
-    "matchesUrl": "http://localhost:4455/warden/allowed",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/allowed",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/warden/token/allowed",
+      "url": "${KETO_URL}/warden/oauth2/authorize",
       "stripPath": "/warden/allowed"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:token:allowed",

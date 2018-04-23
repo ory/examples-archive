@@ -1,9 +1,15 @@
-FROM oryd/hydra:latest
-FROM oryd/keto:latest
-FROM oryd/oathkeeper:latest
+ARG HYDRA_VERSION
+ARG KETO_VERSION
+ARG OATHKEEPER_VERSION
+
+FROM oryd/hydra:$HYDRA_VERSION
+FROM oryd/keto:$KETO_VERSION
+FROM oryd/oathkeeper:$OATHKEEPER_VERSION
 
 FROM alpine:3.7
 
+ARG SETUP_EXAMPLE
+ENV ENV_SETUP_EXAMPLE=$SETUP_EXAMPLE
 ENV BUILD_DEPS="gettext"  \
     RUNTIME_DEPS="libintl"
 
@@ -31,9 +37,10 @@ COPY --from=0 /usr/bin/hydra /usr/bin/hydra
 COPY --from=1 /usr/bin/keto /usr/bin/keto
 COPY --from=2 /usr/bin/oathkeeper /usr/bin/oathkeeper
 
-ADD serve.conf /etc/supervisor/conf.d/supervisord.conf
-ADD . /tmp
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD . /tmp/
+RUN chmod -R a=+x /tmp/scripts/
 
-RUN chmod a=+x /tmp/configure.sh && chmod -R a=+x /tmp/scripts/
+RUN mv "/tmp/${ENV_SETUP_EXAMPLE}/config" /tmp/config
 
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

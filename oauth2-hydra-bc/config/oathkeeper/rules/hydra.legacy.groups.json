@@ -4,10 +4,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/warden/groups",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/roles",
+      "url": "${KETO_URL}/roles",
       "stripPath": "/warden/groups"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:groups",
@@ -16,14 +16,14 @@
       "hydra.warden.groups"
     ]
   }, {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:list",
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:create",
     "matchesMethods": [
       "POST"
     ],
-    "matchesUrl": "http://localhost:4455/warden/groups",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/roles",
+      "url": "${KETO_URL}/roles",
       "stripPath": "/warden/groups"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:groups",
@@ -36,10 +36,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/warden/groups/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/roles",
+      "url": "${KETO_URL}/roles",
       "stripPath": "/warden/groups"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:groups:$1",
@@ -52,10 +52,10 @@
     "matchesMethods": [
       "DELETE"
     ],
-    "matchesUrl": "http://localhost:4455/warden/groups/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/roles",
+      "url": "${KETO_URL}/roles",
       "stripPath": "/warden/groups"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:groups:$1",
@@ -68,10 +68,10 @@
     "matchesMethods": [
       "POST"
     ],
-    "matchesUrl": "http://localhost:4455/warden/groups/<[^/]+>/members",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>/members",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/roles",
+      "url": "${KETO_URL}/roles",
       "stripPath": "/warden/groups"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:groups:$1",
@@ -80,14 +80,14 @@
       "hydra.warden.groups"
     ]
   }, {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:members:add",
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:members:remove",
     "matchesMethods": [
       "DELETE"
     ],
-    "matchesUrl": "http://localhost:4455/warden/groups/<[^/]+>/members",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>/members",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/roles",
+      "url": "${KETO_URL}/roles",
       "stripPath": "/warden/groups"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:groups:$1",

@@ -4,10 +4,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/policies",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/policies",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${KETO_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies",
     "requiredAction": "${HYDRA_ACTION_PREFIX}list",
@@ -20,10 +20,10 @@
     "matchesMethods": [
       "POST"
     ],
-    "matchesUrl": "http://localhost:4455/policies",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/policies",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${KETO_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies",
     "requiredAction": "${HYDRA_ACTION_PREFIX}create",
@@ -36,10 +36,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/policies/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/policies/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${KETO_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}get",
@@ -52,10 +52,10 @@
     "matchesMethods": [
       "DELETE"
     ],
-    "matchesUrl": "http://localhost:4455/policies/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/policies/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${KETO_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}delete",
@@ -68,10 +68,10 @@
     "matchesMethods": [
       "PUT"
     ],
-    "matchesUrl": "http://localhost:4455/policies/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/policies/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${KETO_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}update",

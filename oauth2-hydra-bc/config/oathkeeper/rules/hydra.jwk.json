@@ -4,10 +4,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/.well-known/jwks.json",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/.well-known/jwks.json",
     "mode": "pass_through",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     }
   },
   {
@@ -15,10 +15,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1:$2",
     "requiredAction": "${HYDRA_ACTION_PREFIX}get",
@@ -31,10 +31,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}get",
@@ -47,10 +47,10 @@
     "matchesMethods": [
       "POST"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}create",
@@ -63,10 +63,10 @@
     "matchesMethods": [
       "PUT"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}update",
@@ -79,10 +79,10 @@
     "matchesMethods": [
       "PUT"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1:$2",
     "requiredAction": "${HYDRA_ACTION_PREFIX}update",
@@ -95,10 +95,10 @@
     "matchesMethods": [
       "DELETE"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}delete",
@@ -111,10 +111,10 @@
     "matchesMethods": [
       "DELETE"
     ],
-    "matchesUrl": "http://localhost:4455/keys/<[^/]+>/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<[^/]+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}keys:$1:$2",
     "requiredAction": "${HYDRA_ACTION_PREFIX}delete",

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:get",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/consent/requests/<[^/]+>",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "requiredResource": "${HYDRA_RESOURCE_PREFIX}oauth2:consent:requests:$1",
+    "requiredAction": "${HYDRA_ACTION_PREFIX}get",
+    "requiredScopes": [
+      "hydra.consent"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:accept",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/consent/requests/<[^/]+>/accept",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "requiredResource": "${HYDRA_RESOURCE_PREFIX}oauth2:consent:requests:$1",
+    "requiredAction": "${HYDRA_ACTION_PREFIX}accept",
+    "requiredScopes": [
+      "hydra.consent"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:reject",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/consent/requests/<[^/]+>/reject",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "requiredResource": "${HYDRA_RESOURCE_PREFIX}oauth2:consent:requests:$1",
+    "requiredAction": "${HYDRA_ACTION_PREFIX}reject",
+    "requiredScopes": [
+      "hydra.consent"
+    ]
+  }
+]

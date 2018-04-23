@@ -4,69 +4,112 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/clients",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/clients",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}clients",
     "requiredAction": "${HYDRA_ACTION_PREFIX}get",
-    "requiredScopes": ["hydra.clients"]
+    "requiredScopes": [
+      "hydra.clients"
+    ]
   },
+
+
+
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:create",
     "matchesMethods": [
       "POST"
     ],
-    "matchesUrl": "http://localhost:4455/clients",
-    "mode": "keto_warden_oauth2",
-    "upstream": {
-      "url": "http://localhost:4444/"
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/clients",
+
+    "authenticators": [
+      {
+        "type": "oauth2_introspection",
+        "options": {
+          "requiredScopes": []
+        }
+      },
+      {
+        "type": "oauth2_client_credentials",
+        "options": {
+          "requiredScopes": []
+        }
+      }
+    ],
+    "authorizers": [
+
+    ],
+
+    "validators": {
+      "all": [
+        {
+          "validator": "keto_warden_oauth2",
+          "configuration": {
+            "requiredResource": "${HYDRA_RESOURCE_PREFIX}clients",
+            "requiredAction": "${HYDRA_ACTION_PREFIX}create",
+            "requiredScopes": [
+              "hydra.clients"
+            ]
+          }
+        }
+      ]
     },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}clients",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}create",
-    "requiredScopes": ["hydra.clients"]
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
   },
+
+
+
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:update",
     "matchesMethods": [
       "PUT"
     ],
-    "matchesUrl": "http://localhost:4455/clients/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/clients/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}clients:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}update",
-    "requiredScopes": ["hydra.clients"]
+    "requiredScopes": [
+      "hydra.clients"
+    ]
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:get",
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/clients/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/clients/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}clients:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}get",
-    "requiredScopes": ["hydra.clients"]
+    "requiredScopes": [
+      "hydra.clients"
+    ]
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:delete",
     "matchesMethods": [
       "DELETE"
     ],
-    "matchesUrl": "http://localhost:4455/clients/<.+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/clients/<.+>",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
     "requiredResource": "${HYDRA_RESOURCE_PREFIX}clients:$1",
     "requiredAction": "${HYDRA_ACTION_PREFIX}delete",
-    "requiredScopes": ["hydra.clients"]
+    "requiredScopes": [
+      "hydra.clients"
+    ]
   }
 ]

@@ -1,50 +1,100 @@
 [
   {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:get",
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:well-known",
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/oauth2/consent/requests/<[^/]+>",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/.well-known/openid-configuration",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:userinfo",
+    "matchesMethods": [
+      "GET", "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/userinfo",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:revoke",
+    "matchesMethods": [
+      "GET", "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/revoke",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:token",
+    "matchesMethods": [
+      "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/token",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:auth",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/auth",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent-fallback",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/consent-fallback",
+    "mode": "pass_through",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:introspect",
+    "matchesMethods": [
+      "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/introspect",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}oauth2:consent:requests:$1",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}get",
+    "requiredResource": "${KETO_RESOURCE_PREFIX}oauth2:tokens",
+    "requiredAction": "${KETO_ACTION_PREFIX}introspect",
     "requiredScopes": [
-      "hydra.consent"
+      "hydra.introspect"
     ]
   },
   {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:accept",
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:flush",
     "matchesMethods": [
-      "GET"
+      "POST"
     ],
-    "matchesUrl": "http://localhost:4455/oauth2/consent/requests/<[^/]+>/accept",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/introspect",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${HYDRA_URL}/"
     },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}oauth2:consent:requests:$1",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}accept",
+    "requiredResource": "${KETO_RESOURCE_PREFIX}oauth2:tokens",
+    "requiredAction": "${KETO_ACTION_PREFIX}flush",
     "requiredScopes": [
-      "hydra.consent"
-    ]
-  },
-  {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:reject",
-    "matchesMethods": [
-      "GET"
-    ],
-    "matchesUrl": "http://localhost:4455/oauth2/consent/requests/<[^/]+>/reject",
-    "mode": "keto_warden_oauth2",
-    "upstream": {
-      "url": "http://localhost:4444/"
-    },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}oauth2:consent:requests:$1",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}reject",
-    "requiredScopes": [
-      "hydra.consent"
+      "hydra.flush-tokens"
     ]
   }
 ]

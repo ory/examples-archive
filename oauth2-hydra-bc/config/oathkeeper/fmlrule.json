@@ -1,0 +1,8 @@
+[
+  {
+    "description": "Authenticates bearer and basic auth using OAuth2 standards, applies warden logic, and converts to ID token"
+  },
+  {
+    "description": "A rule that converts basic auth and bearer auf to ID token"
+  }
+]

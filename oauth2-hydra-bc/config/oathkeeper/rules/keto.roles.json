@@ -1,18 +1,98 @@
 [
   {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:policies:list",
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:list",
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455/policies",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/roles",
     "mode": "keto_warden_oauth2",
     "upstream": {
-      "url": "http://localhost:4444/"
+      "url": "${KETO_URL}/"
     },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}policies",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}list",
+    "requiredResource": "${KETO_RESOURCE_PREFIX}roles",
+    "requiredAction": "${KETO_ACTION_PREFIX}list",
     "requiredScopes": [
-      "hydra.policies"
+      "keto.roles"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:create",
+    "matchesMethods": [
+      "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}roles",
+    "requiredAction": "${KETO_ACTION_PREFIX}create",
+    "requiredScopes": [
+      "keto.roles"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:get",
+    "matchesMethods": [
+      "GET"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}roles:$1",
+    "requiredAction": "${KETO_ACTION_PREFIX}get",
+    "requiredScopes": [
+      "keto.roles"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:delete",
+    "matchesMethods": [
+      "DELETE"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}roles:$1",
+    "requiredAction": "${KETO_ACTION_PREFIX}delete",
+    "requiredScopes": [
+      "keto.roles"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:members:add",
+    "matchesMethods": [
+      "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>/members",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}roles:$1:members",
+    "requiredAction": "${KETO_ACTION_PREFIX}add",
+    "requiredScopes": [
+      "keto.roles"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:members:remove",
+    "matchesMethods": [
+      "DELETE"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>/members",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}roles:$1:members",
+    "requiredAction": "${KETO_ACTION_PREFIX}remove",
+    "requiredScopes": [
+      "keto.roles"
     ]
   }
 ]

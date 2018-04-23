@@ -4,10 +4,10 @@
     "matchesMethods": [
       "GET"
     ],
-    "matchesUrl": "http://localhost:4455//health/status",
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}//health/status",
     "mode": "pass_through",
     "upstream": {
-      "url": "http://localhost:4444/"
-    },
+      "url": "${HYDRA_URL}/"
+    }
   }
 ]

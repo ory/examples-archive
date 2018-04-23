@@ -6,7 +6,8 @@
   ],
   "effect": "allow",
   "resources": [
-    "${HYDRA_RESOURCE_PREFIX}<.*>"
+    "${HYDRA_RESOURCE_PREFIX}<.*>",
+    "${KETO_RESOURCE_PREFIX}<.*>"
   ],
   "actions": [
     "<.*>"

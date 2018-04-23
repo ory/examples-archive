@@ -1,0 +1,34 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:warden:subjects:authorize",
+    "matchesMethods": [
+      "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/subjects/authorize",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}warden:subjects",
+    "requiredAction": "${KETO_ACTION_PREFIX}authorize",
+    "requiredScopes": [
+      "keto.warden"
+    ]
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:warden:authorize",
+    "matchesMethods": [
+      "POST"
+    ],
+    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/oauth2/authorize",
+    "mode": "keto_warden_oauth2",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "requiredResource": "${KETO_RESOURCE_PREFIX}warden:oauth2",
+    "requiredAction": "${KETO_ACTION_PREFIX}authorize",
+    "requiredScopes": [
+      "keto.warden"
+    ]
+  }
+]
