@@ -1,8 +1,55 @@
 [
   {
-    "description": "Authenticates bearer and basic auth using OAuth2 standards, applies warden logic, and converts to ID token"
-  },
-  {
-    "description": "A rule that converts basic auth and bearer auf to ID token"
+    "matches": [
+      {
+        "url": "myproxy.com/api",
+        "methods": ["GET", "POST"],
+        "upstream": {
+          "preserveHost": true,
+          "stripPath": "/api",
+          "url": "mybackend.com/api"
+        }
+      }
+    ],
+    "authenticators": [
+      {
+        "handler": "noop"
+      },
+      {
+        "handler": "anonymous"
+      },
+      {
+        "handler": "oauth2Introspection",
+        "config": {
+          "requiredScopes": [
+            "foo",
+            "bar"
+          ]
+        }
+      },
+      {
+        "handler": "oauth2Introspection",
+        "config": {
+          "requiredScopes": [
+            "foo",
+            "bar"
+          ],
+          "endpoint": "some/other/endpoint"
+        }
+      },
+      {
+        "authenticator": "oauth2ClientCredentials"
+      }
+    ],
+    "authorizer": {
+      "handler": "ketoWarden",
+      "config": {
+        "requiredResource": "foo:bar",
+        "requiredAction": "foo:bar"
+      }
+    },
+    "session": {
+      "handler": "noop|idToken"
+    }
   }
 ]
