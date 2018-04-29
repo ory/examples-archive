@@ -1,0 +1,249 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:well-known",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/.well-known/jwks.json",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:get-key",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<.+>",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.get"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1:$2",
+        "required_action": "${HYDRA_ACTION_PREFIX}get"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:get-key-set",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.get"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
+        "required_action": "${HYDRA_ACTION_PREFIX}get"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:create-key-set",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.create"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
+        "required_action": "${HYDRA_ACTION_PREFIX}create"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:update-key-set",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
+      "methods": [
+        "PUT"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.create"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
+        "required_action": "${HYDRA_ACTION_PREFIX}update"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:update-key",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<[^/]+>",
+      "methods": [
+        "PUT"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.update"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1:$2",
+        "required_action": "${HYDRA_ACTION_PREFIX}update"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:delete-key-set",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
+      "methods": [
+        "DELETE"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.delete"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1",
+        "required_action": "${HYDRA_ACTION_PREFIX}delete"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:delete-key",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<[^/]+>",
+      "methods": [
+        "DELETE"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.keys.delete"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}keys:$1:$2",
+        "required_action": "${HYDRA_ACTION_PREFIX}delete"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  }
+]

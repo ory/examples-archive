@@ -1,0 +1,7 @@
+{
+  "id": "${HYDRA_SUBJECT_PREFIX}${OATHKEEPER_HYDRA_CLIENT_ID}",
+  "client_secret": "${OATHKEEPER_HYDRA_CLIENT_SECRET}",
+  "scope": "",
+  "grant_types": ["client_credentials"],
+  "response_types": ["token"]
+}

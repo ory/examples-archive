@@ -1,0 +1,15 @@
+{
+  "id": "${HYDRA_RESOURCE_PREFIX}policies:root-client",
+  "description": "This is a policy created by ORY Hydra and issued to the first client. It grants all of hydra's administrative privileges to the client and enables the client_credentials response type.",
+  "subjects": [
+    "${HYDRA_SUBJECT_PREFIX}${HYDRA_FORCE_ROOT_CLIENT_ID}"
+  ],
+  "effect": "allow",
+  "resources": [
+    "${HYDRA_RESOURCE_PREFIX}<.*>",
+    "${KETO_RESOURCE_PREFIX}<.*>"
+  ],
+  "actions": [
+    "<.*>"
+  ]
+}

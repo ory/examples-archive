@@ -1,0 +1,124 @@
+###########################################################################
+#######             FOR DEMONSTRATION PURPOSES ONLY                 #######
+###########################################################################
+#                                                                         #
+# If you have not yet read the tutorial, do so now:                       #
+#  https://ory-am.gitbooks.io/hydra/content/tutorial.html                 #
+#                                                                         #
+# This set up is only for demonstration purposes. The login               #
+# endpoint can only be used if you follow the steps in the tutorial.      #
+#                                                                         #
+###########################################################################
+
+version: '2'
+
+services:
+
+  migrate:
+    image: oryd/hydra:latest
+    links:
+      - postgresd:postgresd
+    environment:
+      - LOG_LEVEL=debug
+      - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
+    command:
+      migrate sql postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable
+    restart: on-failure
+
+  services:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - HYDRA_VERSION=$HYDRA_VERSION
+        - KETO_VERSION=$KETO_VERSION
+        - OATHKEEPER_VERSION=$OATHKEEPER_VERSION
+        - SETUP_EXAMPLE=$SETUP_EXAMPLE
+    links:
+      - postgresd:postgresd
+#     Uncomment the following line to use mysql instead.
+#      - mysqld:mysqld
+    depends_on:
+      - migrate
+    volumes:
+      - hydravolume:/root
+    ports:
+      - "4444:4444"
+      - "4445:4445"
+      - "4455:4455"
+      - "4456:4456"
+      - "4466:4466"
+    environment:
+      - LOG_LEVEL=debug
+
+      # Essential configuration for Hydra
+      - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
+      - HYDRA_DATABASE_URL=postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable
+
+      # Set up URLs which will be used by configuration scripts and to wire everything together
+      - HYDRA_CONSENT_URL=http://localhost:3000/consent
+      - HYDRA_ISSUER=http://localhost:4444/
+      - OATHKEEPER_ISSUER_URL=http://localhost:4455/
+
+      # All of these URLs MUST NOT end with a trailing slash. This is very important!
+      - HYDRA_URL=http://localhost:4444
+      - KETO_URL=http://localhost:4466
+      - OATHKEEPER_API_URL=http://localhost:4456
+      - OATHKEEPER_PROXY_URL=http://localhost:4455
+
+      # This sets the prefix for all resource, action, and subject names. Be aware that this prefix is automatically
+      # applied to all OAuth2 Clients as well.
+      - "HYDRA_SUBJECT_PREFIX=sn:hydra:"
+      - "HYDRA_RESOURCE_PREFIX=rn:hydra:"
+      - HYDRA_ACTION_PREFIX=
+      - "OATHKEEPER_RESOURCE_PREFIX=rn:oathkeeper:"
+      - OATHKEEPER_ACTION_PREFIX=
+      - "KETO_RESOURCE_PREFIX=rn:keto:"
+      - KETO_ACTION_PREFIX=
+
+      # OAuth2 clients and their secrets, will be used by the respective services as well as configuration scripts
+      - HYDRA_ROOT_CLIENT_SECRET=demo-password
+      - OATHKEEPER_HYDRA_JWK_SET_ID=jwk:oathkeeper
+
+      - HYDRA_FORCE_ROOT_CLIENT_ID=clients:root
+      - HYDRA_FORCE_ROOT_CLIENT_SECRET=demo-password
+      - OATHKEEPER_HYDRA_CLIENT_ID=clients:oathkeeper-client
+      - OATHKEEPER_HYDRA_CLIENT_SECRET=dummy-oathkeeper-secret
+      - KETO_HYDRA_CLIENT_ID=clients:keto-client
+      - KETO_HYDRA_CLIENT_SECRET=dummy-keto-secret
+      - CONSENT_APP_HYDRA_CLIENT_ID=clients:consent-client
+      - CONSENT_APP_HYDRA_CLIENT_SECRET=dummy-consent-secret
+
+#     Uncomment the following line to use mysql instead.
+#      - DATABASE_URL=mysql://root:secret@tcp(mysqld:3306)/mysql?parseTime=true
+    restart: unless-stopped
+
+  identity-provider:
+    environment:
+      - HYDRA_URL=http://services:4444
+      - HYDRA_CLIENT_ID=clients:consent-client
+      - HYDRA_CLIENT_SECRET=dummy-consent-secret
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    image: oryd/hydra-consent-app-express:v0.11.0
+    links:
+      - services
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  postgresd:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=hydra
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=hydra
+
+#  Uncomment the following section to use mysql instead.
+#  mysqld:
+#    image: mysql:5.7
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=secret
+
+volumes:
+  hydravolume:
+    driver: local

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:list",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/roles",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "keto.roles"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}roles",
+        "required_action": "${HYDRA_ACTION_PREFIX}list"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:create",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/groups",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "keto.roles"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}roles",
+        "required_action": "${HYDRA_ACTION_PREFIX}create"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:get",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "keto.roles"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}roles:$1",
+        "required_action": "${HYDRA_ACTION_PREFIX}get"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:delete",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>",
+      "methods": [
+        "DELETE"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "keto.roles"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}roles:$1",
+        "required_action": "${HYDRA_ACTION_PREFIX}delete"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:members:add",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>/members",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "keto.roles"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}roles:$1:members",
+        "required_action": "${HYDRA_ACTION_PREFIX}add"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:keto:roles:members:remove",
+    "upstream": {
+      "url": "${KETO_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/groups/<[^/]+>/members",
+      "methods": [
+        "DELETE"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "keto.roles"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}roles:$1:members",
+        "required_action": "${HYDRA_ACTION_PREFIX}remove"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  }
+]
