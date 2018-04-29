@@ -1,100 +1,222 @@
 [
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:well-known",
-    "matchesMethods": [
-      "GET"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/.well-known/openid-configuration",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/.well-known/openid-configuration",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:userinfo",
-    "matchesMethods": [
-      "GET", "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/userinfo",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/userinfo",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:revoke",
-    "matchesMethods": [
-      "GET", "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/revoke",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/revoke",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:token",
-    "matchesMethods": [
-      "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/token",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/token",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:auth",
-    "matchesMethods": [
-      "GET"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/auth",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/auth",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent-fallback",
-    "matchesMethods": [
-      "GET"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/consent-fallback",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/consent-fallback",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:introspect",
-    "matchesMethods": [
-      "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/introspect",
-    "mode": "keto_warden_oauth2",
     "upstream": {
       "url": "${HYDRA_URL}/"
     },
-    "requiredResource": "${KETO_RESOURCE_PREFIX}oauth2:tokens",
-    "requiredAction": "${KETO_ACTION_PREFIX}introspect",
-    "requiredScopes": [
-      "hydra.introspect"
-    ]
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/introspect",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_client_credentials",
+        "config": {
+          "required_scope": [
+            "hydra.introspect"
+          ]
+        }
+      },
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.introspect"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}oauth2:tokens",
+        "required_action": "${HYDRA_ACTION_PREFIX}introspect"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
   },
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:flush",
-    "matchesMethods": [
-      "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/oauth2/introspect",
-    "mode": "keto_warden_oauth2",
     "upstream": {
       "url": "${HYDRA_URL}/"
     },
-    "requiredResource": "${KETO_RESOURCE_PREFIX}oauth2:tokens",
-    "requiredAction": "${KETO_ACTION_PREFIX}flush",
-    "requiredScopes": [
-      "hydra.flush-tokens"
-    ]
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/flush",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_client_credentials",
+        "config": {
+          "required_scope": [
+            "hydra.introspect"
+          ]
+        }
+      },
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.tokens.flush"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}oauth2:tokens",
+        "required_action": "${HYDRA_ACTION_PREFIX}flush"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
   }
 ]

@@ -1,36 +1,68 @@
 [
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:warden:allowed",
-    "matchesMethods": [
-      "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/allowed",
-    "mode": "keto_warden_oauth2",
     "upstream": {
       "url": "${KETO_URL}/warden/subjects/authorize",
-      "stripPath": "/warden/allowed"
+      "strip_path": "/warden/allowed"
     },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:allowed",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}decide",
-    "requiredScopes": [
-      "hydra.warden"
-    ]
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/allowed",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.warden"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}warden:allowed",
+        "required_action": "${HYDRA_ACTION_PREFIX}decide"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
   },
   {
-    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:warden:allowed",
-    "matchesMethods": [
-      "POST"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}/warden/allowed",
-    "mode": "keto_warden_oauth2",
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:warden:token:allowed",
     "upstream": {
       "url": "${KETO_URL}/warden/oauth2/authorize",
-      "stripPath": "/warden/allowed"
+      "strip_path": "/warden/allowed"
     },
-    "requiredResource": "${HYDRA_RESOURCE_PREFIX}warden:token:allowed",
-    "requiredAction": "${HYDRA_ACTION_PREFIX}decide",
-    "requiredScopes": [
-      "hydra.warden"
-    ]
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/warden/token/allowed",
+      "methods": [
+        "POST"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "hydra.warden"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_resource": "${HYDRA_RESOURCE_PREFIX}warden:token:allowed",
+        "required_action": "${HYDRA_ACTION_PREFIX}decide"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
   }
 ]

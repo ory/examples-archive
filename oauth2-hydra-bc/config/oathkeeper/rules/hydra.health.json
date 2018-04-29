@@ -1,13 +1,25 @@
 [
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:health:status",
-    "matchesMethods": [
-      "GET"
-    ],
-    "matchesUrl": "${OATHKEEPER_PROXY_URL}//health/status",
-    "mode": "pass_through",
     "upstream": {
       "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/health/status",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
     }
   }
 ]
