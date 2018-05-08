@@ -14,15 +14,25 @@ version: '2'
 
 services:
 
-  migrate:
-    image: oryd/hydra:latest
+  hydra-migrate:
+    image: oryd/hydra-preview:$HYDRA_VERSION
     links:
       - postgresd:postgresd
     environment:
       - LOG_LEVEL=debug
       - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
     command:
-      migrate sql postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable
+      migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+    restart: on-failure
+
+  keto-migrate:
+    image: oryd/keto:$KETO_VERSION
+    links:
+      - postgresd:postgresd
+    environment:
+      - LOG_LEVEL=debug
+    command:
+      migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
     restart: on-failure
 
   services:
@@ -33,31 +43,37 @@ services:
         - HYDRA_VERSION=$HYDRA_VERSION
         - KETO_VERSION=$KETO_VERSION
         - OATHKEEPER_VERSION=$OATHKEEPER_VERSION
-        - SETUP_EXAMPLE=$SETUP_EXAMPLE
     links:
       - postgresd:postgresd
 #     Uncomment the following line to use mysql instead.
 #      - mysqld:mysqld
     depends_on:
-      - migrate
+      - hydra-migrate
+      - keto-migrate
     volumes:
-      - hydravolume:/root
+      - ../scripts:/scripts
     ports:
       - "4444:4444"
-      - "4445:4445"
       - "4455:4455"
       - "4456:4456"
       - "4466:4466"
     environment:
-      - LOG_LEVEL=debug
+      # Debuggin
+      - LOG_LEVEL=info
+      - HYDRA_OAUTH2_SHARE_ERROR_DEBUG=1
 
       # Essential configuration for Hydra
       - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
-      - HYDRA_DATABASE_URL=postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable
+      - HYDRA_DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      - HYDRA_OAUTH2_CONSENT_URL=http://localhost:3000/consent
+      - HYDRA_OAUTH2_LOGIN_URL=http://localhost:3000/login
+      - HYDRA_OAUTH2_ISSUER_URL=http://localhost:4455
+
+      # Essential configuration for Keto
+      ## Note that this is the same database as ORY Hydra. You still need to run `keto migrate hydra`
+      - KETO_DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
 
       # Set up URLs which will be used by configuration scripts and to wire everything together
-      - HYDRA_CONSENT_URL=http://localhost:3000/consent
-      - HYDRA_ISSUER=http://localhost:4444/
       - OATHKEEPER_ISSUER_URL=http://localhost:4455/
 
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
@@ -91,15 +107,12 @@ services:
 
 #     Uncomment the following line to use mysql instead.
 #      - DATABASE_URL=mysql://root:secret@tcp(mysqld:3306)/mysql?parseTime=true
-    restart: unless-stopped
 
   identity-provider:
     environment:
       - HYDRA_URL=http://services:4444
-      - HYDRA_CLIENT_ID=clients:consent-client
-      - HYDRA_CLIENT_SECRET=dummy-consent-secret
       - NODE_TLS_REJECT_UNAUTHORIZED=0
-    image: oryd/hydra-consent-app-express:v0.11.0
+    image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     links:
       - services
     ports:
@@ -109,16 +122,12 @@ services:
   postgresd:
     image: postgres:9.6
     environment:
-      - POSTGRES_USER=hydra
+      - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=hydra
+      - POSTGRES_DB=accesscontroldb
 
 #  Uncomment the following section to use mysql instead.
 #  mysqld:
 #    image: mysql:5.7
 #    environment:
 #      - MYSQL_ROOT_PASSWORD=secret
-
-volumes:
-  hydravolume:
-    driver: local

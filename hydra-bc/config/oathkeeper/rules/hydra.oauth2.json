@@ -99,7 +99,30 @@
       "url": "${HYDRA_URL}/"
     },
     "match": {
-      "url": "${OATHKEEPER_PROXY_URL}/oauth2/auth",
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/auth<.*>",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  },
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:fallbacks",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oauth2/fallbacks/<.*>",
       "methods": [
         "GET"
       ]
