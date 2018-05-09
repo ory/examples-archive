@@ -20,6 +20,9 @@ start-hydra-bc:
 restart-hydra-bc:
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose restart
 
+kill-hydra-bc:
+		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose kill
+
 reset-hydra-bc:
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose kill
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose rm -f
