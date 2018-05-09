@@ -45,7 +45,7 @@ to connect the containers... ;)
 
 #### Architecture
 
-![Docker Container Architecture](./hydra-by/docs/container-arch.png)
+![Docker Container Architecture](./hydra-bc/docs/container-arch.png)
 
 This example has three docker containers:
 
