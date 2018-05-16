@@ -1,0 +1,8 @@
+{
+  "id": "${KETO_RESOURCE_PREFIX}policies:root-client",
+  "description": "This is an empty example policy.",
+  "subjects": [],
+  "effect": "allow",
+  "resources": [],
+  "actions": []
+}

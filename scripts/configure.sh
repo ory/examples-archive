@@ -4,8 +4,6 @@ set -euo pipefail
 
 cd "$( dirname "${BASH_SOURCE[0]}" )/.."
 
-ls -la
-
 echo "Sourcing helpers..."
 source /scripts/helper/retry.sh
 source /scripts/helper/envsubstfiles.sh

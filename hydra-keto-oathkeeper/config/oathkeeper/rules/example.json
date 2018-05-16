@@ -1,0 +1,25 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:example",
+    "upstream": {
+      "url": "${HYDRA_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/example",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "authorizer": {
+      "handler": "noop"
+    },
+    "credentials_issuer": {
+      "handler": "noop"
+    }
+  }
+]
