@@ -21,8 +21,8 @@ Run this example with:
 $ make start-hydra-bc
 ```
 
-Please be patient. The system has to boot a PostgreSQL database, execute SQL migrations for two services, then create
-several configuration items. This might take up to 5 minutes, depending on your system. While you wait, you may want
+Please be patient. In the background the system will boot a PostgreSQL database, execute SQL migrations for two services, then create
+several configuration items. This might take up to 5 minutes, depending on your system. While you wait or when having trouble, you may want
 to check `docker logs hydra-bc_postgresd_1`, `docker logs hydra-bc_keto-migrate_1`, `docker logs hydra-bc_hydra-migrate_1`,
 and `docker logs hydra-bc_services_1`.
 
@@ -34,7 +34,7 @@ $ curl http://localhost:4466/policies
 $ curl http://localhost:4456/rules
 ```
 
-To perform - for example - the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and do:
+To perform - for example - the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
 
 ```
 $ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4455
@@ -88,8 +88,8 @@ Run this example with:
 $ make start-hko
 ```
 
-Please be patient. The system has to boot a PostgreSQL database, execute SQL migrations for two services, then create
-several configuration items. This might take up to 5 minutes, depending on your system. While you wait, you may want
+Please be patient. In the background the system will boot a PostgreSQL database, execute SQL migrations for two services, then create
+several configuration items. This might take up to 5 minutes, depending on your system. While you wait or when having trouble, you may want
 to check `docker logs hydra-bc_postgresd_1`, `docker logs hydra-bc_keto-migrate_1`, `docker logs hydra-bc_oathkeeper-migrate_1`, `docker logs hydra-bc_hydra-migrate_1`,
 and `docker logs hydra-bc_services_1`.
 
@@ -101,7 +101,7 @@ $ curl http://localhost:4456/rules
 $ curl http://localhost:4466/policies
 ```
 
-You should not see any errors
+You should see the preconfigured settings and no errors.
 
 #### Architecture
 
