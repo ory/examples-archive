@@ -3,6 +3,56 @@
 This repository contains deployment examples and templates for the ORY Ecosystem. This repository does not contain
 examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY Oathkeeper, and ORY Keto.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Overview](#overview)
+- [Examples](#examples)
+  - [Backwards Compatible Template for ORY Hydra < 1.0.0](#backwards-compatible-template-for-ory-hydra--100)
+    - [Running the Example](#running-the-example)
+    - [Architecture](#architecture)
+  - [Full Ecosystem](#full-ecosystem)
+    - [Running the Example](#running-the-example-1)
+    - [Architecture](#architecture-1)
+- [Development](#development)
+  - [ORY Hydra and User Login & Consent Reference Implementation](#ory-hydra-and-user-login-&-consent-reference-implementation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Overview
+
+Each example typically consists of these parts:
+
+- `docker-compose.yml`: The definition for docker-compose.
+- `supervisord.conf`: Configuration for `supervisord` which runs multiple services at once in one Docker container.
+- `config`: Contains configuration items (typically JSON files) for OAuth 2.0 Clients, Access Control Policies, and so on.
+- `Dockerfile`: A customized Dockerfile that is capable of running `supervisord` as well as each service.
+
+Please be aware that **you can't run multiple examples at once as ports will clash**. Use `make rm-<example-name>` to
+kill and remove the containers of a running example before starting up another one.
+
+Before you run any of the examples, run
+
+```
+$ make pull
+```
+
+### Scripts
+
+We wrote several helper scripts capable of:
+
+- Substituting environment variables in JSON files
+- Retrying statements on failure
+- Importing JSON files to the respective services (ORY Hydra, ORY Keto, ORY Oathkeeper)
+
+You will encounter several environment variables in each `docker-compose.yml` file. These are either used for the
+services directly (e.g. `HYDRA_DATABASE_URL`) or are used for variable substitution in the configuration files
+(e.g. `HYDRA_SUBJECT_PREFIX`).
+
+Typically, environment variables are prefixed with the service name they are used for - so `HYDRA_DATABASE_URL` is the
+`DATABASE_URL` environment variable for ORY Hydra. We use variable substitution in the `supervisord.conf` file to achieve that.
+
 ## Examples
 
 ### Backwards Compatible Template for ORY Hydra < 1.0.0
@@ -18,6 +68,7 @@ You should use this example only if you are upgrading from ORY Hydra < 1.0.0 and
 Run this example with:
 
 ```
+$ make pull
 $ make start-hydra-bc
 ```
 
@@ -85,6 +136,7 @@ This boots up all services (ORY Oathkeeper, ORY Hydra, ORY Keto) and creates the
 Run this example with:
 
 ```
+$ make pull
 $ make start-hko
 ```
 
@@ -102,6 +154,12 @@ $ curl http://localhost:4466/policies
 ```
 
 You should see the preconfigured settings and no errors.
+
+To perform the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
+
+```
+$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444
+```
 
 #### Architecture
 
@@ -126,6 +184,23 @@ have for the job. On the downside, `python3` and `pip` are installed to execute 
 
 If you intend to run a system based on this example in production, be aware that none of the ports (except the Oathkeeper Proxy)
 should be exposed directly to the open internet, as some of the endpoint expose administrative features.
+
+### ORY Hydra and User Login & Consent Reference Implementation
+
+This example sets up ORY Hydra and our [User Login and Consent reference implementation](https://github.com/ory/hydra-login-consent-node).
+It works very similar to the other examples as it provides a custom Dockerfile and loads supervisord in order to import
+the ORY Hydra clients.
+
+```
+$ make pull
+$ make start-hydra
+```
+
+To perform - for example - the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
+
+```
+$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444
+```
 
 ## Development
 
