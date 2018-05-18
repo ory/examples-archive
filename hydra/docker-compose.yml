@@ -1,0 +1,90 @@
+###########################################################################
+#######             FOR DEMONSTRATION PURPOSES ONLY                 #######
+###########################################################################
+#                                                                         #
+# If you have not yet read the tutorial, do so now:                       #
+#  https://ory-am.gitbooks.io/hydra/content/tutorial.html                 #
+#                                                                         #
+# This set up is only for demonstration purposes. The login               #
+# endpoint can only be used if you follow the steps in the tutorial.      #
+#                                                                         #
+###########################################################################
+
+version: '2'
+
+services:
+
+  hydra-migrate:
+    image: oryd/hydra-preview:$HYDRA_VERSION
+    links:
+      - postgresd:postgresd
+    environment:
+      - LOG_LEVEL=debug
+      - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
+    command:
+      migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+    restart: on-failure
+
+  services:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - HYDRA_VERSION=$HYDRA_VERSION
+    links:
+      - postgresd:postgresd
+#     Uncomment the following line to use mysql instead.
+#      - mysqld:mysqld
+    depends_on:
+      - hydra-migrate
+    volumes:
+      - ../scripts:/scripts
+    ports:
+      - "4444:4444"
+      - "4455:4455"
+      - "4456:4456"
+      - "4466:4466"
+    environment:
+      # Debuggin
+      - LOG_LEVEL=info
+      - HYDRA_OAUTH2_SHARE_ERROR_DEBUG=1
+
+      # Essential configuration for Hydra
+      - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
+      - HYDRA_DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      - HYDRA_OAUTH2_CONSENT_URL=http://localhost:3000/consent
+      - HYDRA_OAUTH2_LOGIN_URL=http://localhost:3000/login
+      - HYDRA_OAUTH2_ISSUER_URL=http://localhost:4444
+
+      # All of these URLs MUST NOT end with a trailing slash. This is very important!
+      - HYDRA_URL=http://localhost:4444
+
+      # This sets the prefix for all resource, action, and subject names. Be aware that this prefix is automatically
+      # applied to all OAuth2 Clients as well.
+      - "HYDRA_SUBJECT_PREFIX=subjects:hydra:"
+      - "HYDRA_RESOURCE_PREFIX=resources:hydra:"
+      - "HYDRA_ACTION_PREFIX=actions:hydra:"
+
+  identity-provider:
+    environment:
+      - HYDRA_URL=http://services:4444
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
+    links:
+      - services
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  postgresd:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=accesscontroldb
+
+#  Uncomment the following section to use mysql instead.
+#  mysqld:
+#    image: mysql:5.7
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=secret
