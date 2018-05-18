@@ -59,7 +59,7 @@ services:
       - "4466:4466"
     environment:
       # Debuggin
-      - LOG_LEVEL=info
+      - LOG_LEVEL=debug
       - HYDRA_OAUTH2_SHARE_ERROR_DEBUG=1
 
       # Essential configuration for Hydra

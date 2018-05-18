@@ -1,0 +1,17 @@
+{
+  "id": "example-auth-code",
+  "description": "This client can be used to perform (exemplarily) the OAuth 2.0 Authorize Code Flow.",
+  "client_secret": "secret",
+  "scope": "openid offline",
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "response_types": [
+    "code",
+    "id_token"
+  ],
+  "redirect_uris": [
+    "http://localhost:4445/callback"
+  ]
+}
