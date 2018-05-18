@@ -14,54 +14,49 @@ build-dev:
 		docker build -t oryd/oathkeeper:dev ${GOPATH}/src/github.com/ory/oathkeeper/
 		docker build -t oryd/keto:dev ${GOPATH}/src/github.com/ory/keto/
 
-start-hydra-bc:
+pull:
 		docker pull oryd/oathkeeper-preview:latest
 		docker pull oryd/hydra-preview:latest
 		docker pull oryd/keto:latest
+
+###
+
+start-hydra-bc:
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose up --build -d
 
 restart-hydra-bc:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose restart
 
-kill-hydra-bc:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
-		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose kill
-
-reset-hydra-bc:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
+rm-hydra-bc:
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose kill
 		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose rm -f
-		cd hydra-bc; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose up --build -d
+
+reset-hydra-bc: rm-hydra-bc start-hydra-bc
+
+###
 
 start-hko:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
 		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose up --build -d
 
 restart-hko:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
 		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose restart
 
-kill-hko:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
-		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose kill
-
-reset-hko:
-		docker pull oryd/oathkeeper-preview:latest
-		docker pull oryd/hydra-preview:latest
-		docker pull oryd/keto:latest
+rm-hko:
 		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose kill
 		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose rm -f
-		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest KETO_VERSION=latest OATHKEEPER_VERSION=latest docker-compose up --build -d
+
+reset-hko: rm-hko start-hko
+
+###
+
+start-hydra:
+		cd hydra; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest docker-compose up --build -d
+
+restart-hydra:
+		cd hydra; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest docker-compose restart
+
+rm-hydra:
+		cd hydra; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest docker-compose kill
+		cd hydra; LOGIN_CONSENT_VERSION=latest HYDRA_VERSION=latest docker-compose rm -f
+
+reset-hydra: rm-hydra start-hydra
