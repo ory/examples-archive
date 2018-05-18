@@ -8,6 +8,7 @@ examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY
 
 
 - [Overview](#overview)
+  - [Scripts](#scripts)
 - [Examples](#examples)
   - [Backwards Compatible Template for ORY Hydra < 1.0.0](#backwards-compatible-template-for-ory-hydra--100)
     - [Running the Example](#running-the-example)
@@ -15,8 +16,8 @@ examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY
   - [Full Ecosystem](#full-ecosystem)
     - [Running the Example](#running-the-example-1)
     - [Architecture](#architecture-1)
-- [Development](#development)
   - [ORY Hydra and User Login & Consent Reference Implementation](#ory-hydra-and-user-login-&-consent-reference-implementation)
+- [Development](#development)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
