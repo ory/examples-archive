@@ -12,6 +12,7 @@
     "id_token"
   ],
   "redirect_uris": [
-    "http://localhost:4445/callback"
+    "http://localhost:4445/callback",
+    "http://127.0.0.1:4445/callback"
   ]
 }

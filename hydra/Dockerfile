@@ -1,6 +1,6 @@
 ARG HYDRA_VERSION
 
-FROM oryd/hydra-preview:$HYDRA_VERSION
+FROM oryd/hydra:$HYDRA_VERSION
 
 FROM alpine:3.7
 

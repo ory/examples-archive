@@ -15,7 +15,7 @@ version: '2'
 services:
 
   hydra-migrate:
-    image: oryd/hydra-preview:$HYDRA_VERSION
+    image: oryd/hydra:$HYDRA_VERSION
     links:
       - postgresd:postgresd
     environment:
