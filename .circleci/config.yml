@@ -1,0 +1,25 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+#version: 2
+#jobs:
+#  build:
+#    docker:
+#      - image: circleci/golang:1.10
+#        environment:
+#        - TEST_DATABASE_POSTGRESQL=postgres://test:test@localhost:5432/sqlcon?sslmode=disable
+#        - TEST_DATABASE_MYSQL=root:test@(localhost:3306)/mysql?parseTime=true
+#      - image: postgres:9.5
+#        environment:
+#        - POSTGRES_USER=test
+#        - POSTGRES_PASSWORD=test
+#        - POSTGRES_DB=sqlcon
+#      - image: mysql:5.7
+#        environment:
+#        - MYSQL_ROOT_PASSWORD=test
+#    working_directory: /go/src/github.com/ory/sqlcon
+#    steps:
+#      - checkout
+#      - run: curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+#      - run: dep ensure -vendor-only
+#      - run: go test -race ./...

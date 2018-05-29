@@ -4,7 +4,7 @@ ARG OATHKEEPER_VERSION
 
 FROM oryd/hydra:$HYDRA_VERSION
 FROM oryd/keto:$KETO_VERSION
-FROM oryd/oathkeeper-preview:$OATHKEEPER_VERSION
+FROM oryd/oathkeeper:$OATHKEEPER_VERSION
 
 FROM alpine:3.7
 
