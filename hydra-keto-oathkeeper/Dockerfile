@@ -20,19 +20,6 @@ RUN set -x && \
 RUN pip install --upgrade pip
 # RUN apk add --no-cache supervisor bash curl
 
-
-# This is the ORY Hydra port
-EXPOSE 4444
-
-# This is the ORY Oathkeeper Proxy port
-EXPOSE 4455
-
-# This is the ORY Oathkeeper API port
-EXPOSE 4456
-
-# This is the ORY Keto port
-EXPOSE 4466
-
 COPY --from=0 /usr/bin/hydra /usr/bin/hydra
 COPY --from=1 /usr/bin/keto /usr/bin/keto
 COPY --from=2 /usr/bin/oathkeeper /usr/bin/oathkeeper

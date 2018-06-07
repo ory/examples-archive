@@ -8,16 +8,14 @@ endif
 ifndef DOCKER_COMPOSE_VERSION
     $(error "command docker-compose is not available, please install Docker")
 endif
+ifndef ${OATHKEEPER_VERSION}
+	OATHKEEPER_VERSION=v1.0.0-beta.2
+endif
 
 build-dev:
 		docker build -t oryd/hydra:dev ${GOPATH}/src/github.com/ory/hydra/
 		docker build -t oryd/oathkeeper:dev ${GOPATH}/src/github.com/ory/oathkeeper/
 		docker build -t oryd/keto:dev ${GOPATH}/src/github.com/ory/keto/
-
-pull:
-		docker pull oryd/oathkeeper:unstable
-		docker pull oryd/hydra:unstable
-		docker pull oryd/keto:unstable
 
 ###
 

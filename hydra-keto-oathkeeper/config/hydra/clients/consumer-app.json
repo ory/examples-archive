@@ -1,0 +1,18 @@
+{
+  "id": "consumer-app",
+  "description": "This client will be used by the exemplary consumer application.",
+  "client_secret": "consumer-secret",
+  "scope": "openid offline articles.read",
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "response_types": [
+    "code",
+    "id_token"
+  ],
+  "redirect_uris": [
+    "http://localhost:5000/auth/callback",
+    "http://127.0.0.1:5000/auth/callback"
+  ]
+}
