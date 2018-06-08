@@ -84,7 +84,12 @@ const introspect = (req, res, next) => {
 router.get('/',
   introspect,
   (req, res, next) => {
-    res.json({ message: 'Congratulations, you gained access to this endpoint!', tokenClaims: req.user })
+    res.json({
+      title: 'What an incredible blog post!',
+      content: 'This blog post is so interesting, wow! By the way, you have full privileges to read this content as the request has been authorized. Isn\'t that just great? We\'ve even included the user data from the request here! Amazing!',
+      author: 'Aeneas Rekkas',
+      user: req.user
+    })
   })
 
 module.exports = router

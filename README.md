@@ -43,39 +43,67 @@ Typically, environment variables are prefixed with the service name they are use
 
 ## Examples
 
+This repository provides several examples. Each example is documented in detail in the example's README.
+
+* [Full-stack](./hydra-keto-oathkeeper): This example sets up all ORY services, the exemplary User Login and Consent
+Application, the exemplary OAuth 2.0 [Consumer Application](#consumer-application), and an exemplary [Resource Server](#resource-server).
+* [Basic ORY Hydra setup](./hydra): This example sets up ORY Hydra and our exemplary User Login and Consent Application.
+It is the minimal required set up for ORY Hydra which you can use to start experimenting.
+* [Backwards-compatible template](./hydra-bc): This example provides a Docker Image that offers a backwards compatible
+(for versions 0.11.0 / 0.10.0) experience by combining ORY Oathkeeper, ORY Keto, and ORY Hydra in the same Docker Image.
+
 ### Apps
 
-This repository contains two exemplary applications, both written in NodeJS with Express.
+This repository contains two exemplary applications, both written in NodeJS with Express. The idea here is to show you the different ways you can
+authorize requests on both sides (consumer, resource server) and shows the difference in approaches of protecting your services
+with ORY Keto, ORY Oathkeeper, ORY Hydra, or any combination of the three.
+
+The application's code has been documented, and we encourage you to read it. Please note that almost all SDKs used (like
+Passport.js) are built on open standards such as OAuth 2.0. If you do not write applications in NodeJS you will be able
+to find SDKs with similar functionality in other languages.
+
+Please also note that the code is making use of some [ES6 features](oauth2.jade), such as arrow functions, as well as
+async/await. Additionally, don't be fooled by ~100 Lines of Code. We packed everything in one file so you have a better
+time navigating the source code. The most interesting files will be the ones contained in the `routes` directory.
+All other files are either boilerplate ExpressJS or HTML views.
 
 #### Resource Server
 
-A resource server is an application that, for example, exposes a CRUD API for modifying, for example, blog articles.
-As such, resource servers are usually protected and require valid credentials (authentication) as well as a certain permission
+A resource server is an application that, for example, exposes a CRUD API for modifying blog articles.
+Resource servers are usually protected - you don't want a hacker to be able to delete all your blog articles -
+and require valid credentials (authentication) as well as a certain permission (e.g. alice is allowed to modify this article)
 in order to execute the action.
 
 There are different types of credentials (Cookie, JSON Web Token, OAuth 2.0 Access Token, ...) that can be used to protect
-a resource server. Therefore, the [resource server](./apps/resource-server) has three routes:
+a resource server. Therefore, the [resource server](./apps/resource-server) has several different routes:
 
-* [/protected/introspect](./apps/resource-server/routes/introspect): This route requires that an OAuth 2.0 Access Token
+* [/introspect](./apps/resource-server/routes/introspect): This route requires that an OAuth 2.0 Access Token
 is included in the HTTP header ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) and uses the
-[OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) standard to validate the token.
-* [/protected/oathkeeper](./apps/resource-server/routes/oathkeeper): This route also accepts a bearer token
+[OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) flow to validate the token.
+* [/oathkeeper](./apps/resource-server/routes/oathkeeper): This route also accepts a bearer token
 ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) but this time it has to be a JSON Web Token
 signed by ORY Oathkeeper.
-* [/protected/warden/](./apps/resource-server/routes/warden): This route uses the ORY Keto Warden API to check if a request
-is allowed to perform the request. It consists of three subroutes:
-  * `/protected/warden/access-token`: This endpoint requires an OAuth 2.0 Access Token in the HTTP header
+* [/warden/](./apps/resource-server/routes/warden): This route uses the ORY Keto Warden API to check if a request
+is allowed to perform the request. It consists of two subroutes:
+  * `/warden/access-token`: This endpoint requires an OAuth 2.0 Access Token in the HTTP header
     ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) and checks if the token's subject is allowed
-    to perform the requested action.
-  * `/protected/warden/subject`: This endpoint requires HTTP Basic Auth (`Authorization: basic ...`) and checks if the
-    provided credentials match the username/password pairs (`peter:password1`, `bob:password2`, `alice:password3`)
-     and if so, asks the ORY Keto Warden API if the user (e.g. `peter`, `bob`, `alice`) is allowed to perform the action.
+    to perform the requested action using ORY Keto.
+  * `/warden/subject`: This endpoint requires HTTP Basic Auth (`Authorization: basic ...`) and checks if the
+    provided credentials match the username/password pairs (`peter:password1`, `bob:password2`)
+    and if so, asks the ORY Keto Warden API if the user (e.g. `peter`, `bob`, `alice`) is allowed to perform the action.
 
-#### Consumer
+#### Consumer Application
 
-The [consumer application](./apps/consumer) is a web server that fetches data from the "backend"
-- for example the [Resource Server](#resource-server) - and displays it. To do that it, for example, is able to request
-OAuth 2.0 Access Tokens.
+The [consumer application](./apps/consumer) is a web server that fetches data from the backend ("resource server")
+and displays it. In this particular case, the application makes requests to different [Resource Server](#resource-server) endpoints.
+
+The consumer application has several routes (e.g. `/articles/secure-backend-with-oauth2-token-introspection`) which use
+different endpoints at the [Resource Server](#resource-server). The idea here is to show you the different ways you can
+authorize requests on both sides (consumer, resource server).
+
+Some endpoints in the consumer application require a valid OAuth 2.0 Access Token from the user. When accessing one
+of those endpoints, you will be redirected to ORY Hydra and asked to login in and grant the application the required
+scopes. Make sure to **select all scopes** or the examples might not work.
 
 ### Docker
 

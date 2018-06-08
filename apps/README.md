@@ -1,0 +1,20 @@
+PORT=5000 \
+  OAUTH2_AUTH_URL=http://localhost:4444/oauth2/auth \
+  OAUTH2_TOKEN_URL=http://localhost:4444/oauth2/token \
+  OAUTH2_CLIENT_ID=consumer-app \
+  OAUTH2_CLIENT_SECRET=consumer-secret \
+  OAUTH2_REDIRECT_URL=http://localhost:5000/auth/callback \
+  BACKEND_OATHKEEPER_URL=http://localhost:5001/oathkeeper \
+  BACKEND_WARDEN_SUBJECT_URL=http://localhost:5001/warden/subject \
+  BACKEND_WARDEN_TOKEN_URL=http://localhost:5001/warden/token \
+  BACKEND_INTROSPECT_URL=http://localhost:5001/introspect \
+  nodemon start
+
+PORT=5001 \
+  OATHKEEPER_KEY_URL=http://localhost:4456/.well-known/jwks.json \
+  OAUTH2_CLIENT_ID=introspection-app \
+  OAUTH2_CLIENT_SECRET=introspection-secret \
+  OAUTH2_TOKEN_URL=http://localhost:4444/oauth2/token \
+  OAUTH2_INTROSPECT_URL=http://localhost:4444/oauth2/introspect \
+  KETO_URL=http://localhost:4466 \
+  nodemon start

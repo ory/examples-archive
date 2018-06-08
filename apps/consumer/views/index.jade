@@ -18,7 +18,7 @@ block content
                 | : Opening this article will first request an OAuth 2.0 Access Token from you and then make requests
                 | to the backend ("resource server"). The backend performs the OAuth 2.0 Token Introspection flow to validate
                 | the access token and, if the token is valid, will return some data.
-        if (backends.warden.valid)
+        if (backends.warden.token)
             li
                 a(href="/articles/secure-backend-with-ory-keto-oauth2-authorization")
                     code /articles/secure-backend-with-ory-keto-oauth2-authorization

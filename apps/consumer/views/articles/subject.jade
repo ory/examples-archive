@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-    h1 This endpoint makes requests to a server secured using ORY Oathkeeper
+    h1= pageTitle
     p
         a(href="/") Go back
 
@@ -38,7 +38,7 @@ block content
             | This request uses a random JSON Web Token which is invalid. The result will be a 401 error.
         h3 CURL Equivalent
         pre
-            code curl -h "Authorization: eyJhbGciOiJIUzI1NiIsImtpZCI6InB1YmxpYzoxYTE4NmYyNS1kODgyLTQ3NDEtYjI4Mi1jZWFkMDhmNjkzZTMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOlsidGVzdC1jbGllbnQiLCJ0ZXN0LWNsaWVudCJdLCJhdXRoX3RpbWUiOjE1Mjc1OTMwNzksImNfaGFzaCI6ImI4T0N1bDF5dUl6akZBSDN1WFBZNlEiLCJleHAiOjE1Mjc1OTY3MjEsImlhdCI6MTUyNzU5MzEyMiwiaXNzIjoiaHR0cHM6Ly9vaWRjLWNlcnRpZmljYXRpb24ub3J5LnNoOjg0NDMvIiwianRpIjoiZDc5ODI0M2ItMGYzNy00MTJkLWEwZjUtZWQ0OGI0YWVjMDQxIiwibm9uY2UiOiJqUkppV3o5WGVheXhNa3VMIiwicmF0IjoxNTI3NTkzMTIwLCJzdWIiOiJmb29AYmFyLmNvbSJ9.GD33KZ7rTDDyqsPpXRCZODuf3r6oqtcH48bs5jsK-BI" #{url}
+            code curl -h "Authorization: invalid-token" #{url}
         h3 HTTP Response Body
         pre
             code #{invalid.body}

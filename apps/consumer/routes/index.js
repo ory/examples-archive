@@ -45,7 +45,7 @@ const backends = {
   oathkeeper: process.env.BACKEND_OATHKEEPER_URL,
   warden: {
     subject: process.env.BACKEND_WARDEN_SUBJECT_URL,
-    valid: process.env.BACKEND_WARDEN_TOKEN_URL,
+    token: process.env.BACKEND_WARDEN_TOKEN_URL,
   },
   introspect: process.env.BACKEND_INTROSPECT_URL
 }
@@ -83,6 +83,7 @@ router.get('/articles/secure-backend-with-oauth2-token-introspection',
   checkAuthentication,
   async (req, res, next) => {
     const data = {
+      pageTitle: 'This endpoint makes requests to a server secured using OAuth 2.0 Token Introspection',
       accessToken: req.user.accessToken, backends,
       valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
       url: backends.introspect
@@ -97,13 +98,14 @@ router.get('/articles/secure-backend-with-oauth2-token-introspection',
     // Let's make a request without a random (invalid) JSON Web Token
     await makeRequest(backends.introspect, 'invalid-token', data.invalid)
 
-    res.render('articles/secure-backend-with-oauth2-token-introspection', data)
+    res.render('articles/oauth2', data)
   })
 
 router.get('/articles/secure-backend-with-ory-oathkeeper',
   checkAuthentication,
   async (req, res, next) => {
     const data = {
+      pageTitle: 'This endpoint makes requests to a server secured using ORY Oathkeeper',
       accessToken: req.user.accessToken, backends,
       valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
       url: backends.oathkeeper
@@ -115,10 +117,59 @@ router.get('/articles/secure-backend-with-ory-oathkeeper',
     // Let's make a request without a token
     await makeRequest(backends.oathkeeper, '', data.empty)
 
-    // Let's make a request without a random (invalid) JSON Web Token
-    await makeRequest(backends.oathkeeper, 'eyJhbGciOiJIUzI1NiIsImtpZCI6InB1YmxpYzoxYTE4NmYyNS1kODgyLTQ3NDEtYjI4Mi1jZWFkMDhmNjkzZTMiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOlsidGVzdC1jbGllbnQiLCJ0ZXN0LWNsaWVudCJdLCJhdXRoX3RpbWUiOjE1Mjc1OTMwNzksImNfaGFzaCI6ImI4T0N1bDF5dUl6akZBSDN1WFBZNlEiLCJleHAiOjE1Mjc1OTY3MjEsImlhdCI6MTUyNzU5MzEyMiwiaXNzIjoiaHR0cHM6Ly9vaWRjLWNlcnRpZmljYXRpb24ub3J5LnNoOjg0NDMvIiwianRpIjoiZDc5ODI0M2ItMGYzNy00MTJkLWEwZjUtZWQ0OGI0YWVjMDQxIiwibm9uY2UiOiJqUkppV3o5WGVheXhNa3VMIiwicmF0IjoxNTI3NTkzMTIwLCJzdWIiOiJmb29AYmFyLmNvbSJ9.GD33KZ7rTDDyqsPpXRCZODuf3r6oqtcH48bs5jsK-BI', data.invalid)
+    // Let's make a request without a random (invalid) bearer token
+    await makeRequest(backends.oathkeeper, 'invalid-token', data.invalid)
 
-    res.render('articles/secure-backend-with-ory-oathkeeper', data)
+    res.render('articles/oauth2', data)
+  })
+
+// This route makes several requests to the resource server. The accessed URL at the resource server is protected
+// using the ORY Keto Warden API - and more specifically the Warden OAuth 2.0 Access Token Authorization.
+router.get('/articles/secure-backend-with-ory-keto-oauth2-authorization',
+  checkAuthentication,
+  async (req, res, next) => {
+    const data = {
+      pageTitle: 'This endpoint makes requests to a server secured using OAuth 2.0 Token Introspection',
+      accessToken: req.user.accessToken, backends,
+      valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
+      url: backends.warden.token
+    }
+
+    // Let's make a request to the backend with the access token
+    await makeRequest(backends.warden.token, req.user.accessToken, data.valid)
+
+    // Let's make a request without a token
+    await makeRequest(backends.warden.token, '', data.empty)
+
+    // Let's make a request without a random (invalid) JSON Web Token
+    await makeRequest(backends.warden.token, 'invalid-token', data.invalid)
+
+    res.render('articles/oauth2', data)
+  })
+
+// This route makes several requests to the resource server. The accessed URL at the resource server is protected
+// using the ORY Keto Warden API - and more specifically the Warden Subject Authorization.
+router.get('/articles/secure-backend-with-ory-keto-simple',
+  // Authentication is not required here because we will use basic authentication in the requests.
+  // checkAuthentication,
+  async (req, res, next) => {
+    const data = {
+      pageTitle: 'This endpoint makes requests to a server secured using HTTP Basic Auth and ORY Keto',
+      accessToken: req.user.accessToken, backends,
+      valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
+      url: backends.warden.subject
+    }
+
+    // Let's make a request to the backend with the access token
+    await makeRequest(backends.warden.subject, req.user.accessToken, data.valid)
+
+    // Let's make a request without a token
+    await makeRequest(backends.warden.subject, '', data.empty)
+
+    // Let's make a request without a random (invalid) JSON Web Token
+    await makeRequest(backends.warden.subject, 'invalid-token', data.invalid)
+
+    res.render('articles/subject', data)
   })
 
 // This endpoint initializes the OAuth2 request
