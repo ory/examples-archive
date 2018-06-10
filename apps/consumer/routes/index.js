@@ -63,7 +63,7 @@ const checkAuthentication = (req, res, next) => {
 }
 
 // A small helper function to make a request to the backend. It includes a bearer token in the request header.
-const makeRequest = (url, authorization, response) => fetch(url, {
+const makeBearerRequest = (url, authorization, response) => fetch(url, {
   headers: { Authorization: 'bearer ' + authorization }
 }).then((res) => res.ok ? res.json() : res.text())
   .then((body) => {
@@ -71,6 +71,13 @@ const makeRequest = (url, authorization, response) => fetch(url, {
   })
   .catch(err => next(err))
 
+const makeBasicRequest = (url, { username, password }, response) => fetch(url, {
+  headers: { Authorization: 'basic ' + Buffer.from(username + ":" + password).toString('base64') }
+}).then((res) => res.ok ? res.json() : res.text())
+  .then((body) => {
+    response.body = typeof body === 'string' ? body : JSON.stringify(body, null, 2)
+  })
+  .catch(err => next(err))
 
 // This shows the home page.
 router.get('/', (req, res, next) => {
@@ -90,13 +97,13 @@ router.get('/articles/secure-backend-with-oauth2-token-introspection',
     }
 
     // Let's make a request to the backend with the access token
-    await makeRequest(backends.introspect, req.user.accessToken, data.valid)
+    await makeBearerRequest(backends.introspect, req.user.accessToken, data.valid)
 
     // Let's make a request without a token
-    await makeRequest(backends.introspect, '', data.empty)
+    await makeBearerRequest(backends.introspect, '', data.empty)
 
     // Let's make a request without a random (invalid) JSON Web Token
-    await makeRequest(backends.introspect, 'invalid-token', data.invalid)
+    await makeBearerRequest(backends.introspect, 'invalid-token', data.invalid)
 
     res.render('articles/oauth2', data)
   })
@@ -112,13 +119,13 @@ router.get('/articles/secure-backend-with-ory-oathkeeper',
     }
 
     // Let's make a request to the backend with the access token
-    await makeRequest(backends.oathkeeper, req.user.accessToken, data.valid)
+    await makeBearerRequest(backends.oathkeeper, req.user.accessToken, data.valid)
 
     // Let's make a request without a token
-    await makeRequest(backends.oathkeeper, '', data.empty)
+    await makeBearerRequest(backends.oathkeeper, '', data.empty)
 
     // Let's make a request without a random (invalid) bearer token
-    await makeRequest(backends.oathkeeper, 'invalid-token', data.invalid)
+    await makeBearerRequest(backends.oathkeeper, 'invalid-token', data.invalid)
 
     res.render('articles/oauth2', data)
   })
@@ -136,13 +143,13 @@ router.get('/articles/secure-backend-with-ory-keto-oauth2-authorization',
     }
 
     // Let's make a request to the backend with the access token
-    await makeRequest(backends.warden.token, req.user.accessToken, data.valid)
+    await makeBearerRequest(backends.warden.token, req.user.accessToken, data.valid)
 
     // Let's make a request without a token
-    await makeRequest(backends.warden.token, '', data.empty)
+    await makeBearerRequest(backends.warden.token, '', data.empty)
 
     // Let's make a request without a random (invalid) JSON Web Token
-    await makeRequest(backends.warden.token, 'invalid-token', data.invalid)
+    await makeBearerRequest(backends.warden.token, 'invalid-token', data.invalid)
 
     res.render('articles/oauth2', data)
   })
@@ -155,19 +162,22 @@ router.get('/articles/secure-backend-with-ory-keto-simple',
   async (req, res, next) => {
     const data = {
       pageTitle: 'This endpoint makes requests to a server secured using HTTP Basic Auth and ORY Keto',
-      accessToken: req.user.accessToken, backends,
-      valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
+      accessToken: req.user.accessToken,
+      backends,
+      peter: { body: '', auth: { username: 'peter', password: 'password1' } },
+      bob: { body: '', auth: { username: 'bob', password: 'password2' } },
+      empty: { body: '', auth: { username: '', password: '' } },
       url: backends.warden.subject
     }
 
     // Let's make a request to the backend with the access token
-    await makeRequest(backends.warden.subject, req.user.accessToken, data.valid)
+    await makeBasicRequest(backends.warden.subject, data.peter.auth, data.peter)
 
     // Let's make a request without a token
-    await makeRequest(backends.warden.subject, '', data.empty)
+    await makeBasicRequest(backends.warden.subject, data.bob, data.bob)
 
     // Let's make a request without a random (invalid) JSON Web Token
-    await makeRequest(backends.warden.subject, 'invalid-token', data.invalid)
+    await makeBasicRequest(backends.warden.subject, 'invalid-token', data.invalid)
 
     res.render('articles/subject', data)
   })

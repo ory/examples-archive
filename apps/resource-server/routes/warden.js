@@ -2,13 +2,14 @@ const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch')
 const url = require('url')
+const path = require('path')
 const qs = require('querystring')
 const basicAuth = require('express-basic-auth')
 
 const ketoUrl = url.parse(process.env.KETO_URL)
 
 const wardenToken = ({ resource, action, scope = [] }) => (req, res, next) => {
-  return fetch(url.join(process.env.KETO_URL, '/warden/oauth2/access-tokens/authorize'), {
+  return fetch(process.env.KETO_URL.trim('/') + '/warden/oauth2/access-tokens/authorize', {
     headers: {
       'Content-Type': 'application/json'
     },
@@ -28,7 +29,7 @@ const wardenToken = ({ resource, action, scope = [] }) => (req, res, next) => {
 }
 
 const wardenSubject = ({ resource, action }) => (req, res, next) => {
-  return fetch(url.join(process.env.KETO_URL, '/warden/subjects/authorize'), {
+  return fetch(process.env.KETO_URL.trim('/') + '/warden/subjects/authorize', {
     headers: {
       'Content-Type': 'application/json'
     },
