@@ -46,7 +46,6 @@ const refresh = () => {
       token = oauth2.accessToken.create(result)
       return Promise.resolve()
     }).catch((err) => {
-      console.error(err)
       return Promise.reject(err)
     })
 }
@@ -66,7 +65,6 @@ const introspect = (req, res, next) => {
     })
     .then(res => res.ok ? res.json() : Promise.reject(new Error(res.statusText)))
     .then(body => {
-      console.error('body', body)
       if (!body.active) {
         return next(new Error('Bearer token is not active'))
       } else if (body.token_type && body.token_type !== 'access_token') {

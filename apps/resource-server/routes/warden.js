@@ -9,17 +9,17 @@ const basicAuth = require('express-basic-auth')
 const ketoUrl = url.parse(process.env.KETO_URL)
 
 const wardenToken = ({ resource, action, scope = [] }) => (req, res, next) => {
-  return fetch(process.env.KETO_URL.trim('/') + '/warden/oauth2/access-tokens/authorize', {
+  return fetch(process.env.KETO_URL + '/warden/oauth2/access-tokens/authorize', {
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'POST',
-    body: qs.stringify({ resource, action, scope })
+    body: JSON.stringify({ resource, action, scope, token: req.get('Authorization').replace(/bearer\s/gi, '') })
   })
     .then(res => res.ok ? res.json() : Promise.reject(new Error(res.statusText)))
     .then(body => {
       if (!body.allowed) {
-        return next(new Error('Bearer token is not active'))
+        return next(new Error('Request was not allowed'))
       }
 
       req.user = body
@@ -29,17 +29,17 @@ const wardenToken = ({ resource, action, scope = [] }) => (req, res, next) => {
 }
 
 const wardenSubject = ({ resource, action }) => (req, res, next) => {
-  return fetch(process.env.KETO_URL.trim('/') + '/warden/subjects/authorize', {
+  return fetch(process.env.KETO_URL + '/warden/subjects/authorize', {
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'POST',
-    body: qs.stringify({ resource, action, subject: req.auth.user })
+    body: JSON.stringify({ resource, action, subject: req.auth.user })
   })
     .then(res => res.ok ? res.json() : Promise.reject(new Error(res.statusText)))
     .then(body => {
       if (!body.allowed) {
-        return next(new Error('Bearer token is not active'))
+        return next(new Error('Request was not allowed'))
       }
 
       req.user = body
@@ -54,9 +54,12 @@ router.get('/subject',
     users: {
       'peter': 'password1',
       'bob': 'password2'
-    }
+    },
+    unauthorizedResponse: (req) => req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided'
   }),
   // This middleware takes the username from the basic auth to perform the warden request.
+  //
+  // We tell the warden that the resource is blog:posts:2 and the action blog:read.
   wardenSubject({
     resource: 'blog:posts:2',
     action: 'blog:read'
@@ -66,11 +69,12 @@ router.get('/subject',
       title: 'What an incredible blog post!',
       content: 'This blog post is so interesting, wow! By the way, you have full privileges to read this content as the request has been authorized. Isn\'t that just great? We\'ve even included the user data from the request here! Amazing!',
       author: 'Aeneas Rekkas',
-      user: req.user
+      user: req.auth.user
     })
   })
 
 router.get('/token',
+  // We tell the warden that the resource is blog:posts:1 and the action blog:read.
   wardenToken({
     resource: 'blog:posts:1',
     action: 'blog:read'
@@ -81,7 +85,6 @@ router.get('/token',
       content: 'This blog post is so interesting, wow! By the way, you have full privileges to read this content as the request has been authorized. Isn\'t that just great? We\'ve even included the user data from the request here! Amazing!',
       author: 'Aeneas Rekkas',
       user: {
-        username: req.auth.user,
         ...req.user
       }
     })

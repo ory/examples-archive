@@ -35,7 +35,7 @@ block content
     div
         h2 Request with an invalid Access Token
         p
-            | This request uses a random JSON Web Token which is invalid. The result will be a 401 error.
+            | This request uses a random and invalid access token. The result will be a 401 error.
         h3 CURL Equivalent
         pre
             code curl -h "Authorization: invalid-token" #{url}

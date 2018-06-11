@@ -1,0 +1,8 @@
+{
+  "id": "${KETO_RESOURCE_PREFIX}policies:peter-blog",
+  "description": "This is another example policy which works together with the example consumer and resource server app.",
+  "subjects": ["peter"],
+  "effect": "allow",
+  "resources": ["blog:posts:2"],
+  "actions": ["blog:read"]
+}

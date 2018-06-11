@@ -59,8 +59,8 @@ services:
       - LOG_LEVEL=debug
       - SYSTEM_SECRET=youReallyNeedToChangeThis
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
-      - OAUTH2_CONSENT_URL=http://localhost:3000/consent
-      - OAUTH2_LOGIN_URL=http://localhost:3000/login
+      - OAUTH2_CONSENT_URL=http://localhost:4488/consent
+      - OAUTH2_LOGIN_URL=http://localhost:4488/login
       - OAUTH2_ISSUER_URL=http://localhost:4444
       - OAUTH2_SHARE_ERROR_DEBUG=1
       - ISSUER_URL=http://localhost:4444
@@ -156,6 +156,7 @@ services:
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
       - HYDRA_URL=http://hydra:4444
       - KETO_URL=http://keto:4466
+      - RESOURCE_SERVER_URL=http://resource-server:4478
       - OATHKEEPER_API_URL=http://oathkeeper-api:4456
       - OATHKEEPER_PROXY_URL=http://oathkeeper-proxy:4455
 
@@ -182,8 +183,61 @@ services:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     ports:
-      - "3000:3000"
+      - "4488:4488"
     restart: on-failure
+
+  identity-provider:
+    environment:
+      - HYDRA_URL=http://hydra:4444
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - PORT=4488
+    image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
+    ports:
+      - "4488:4488"
+    restart: on-failure
+
+  consumer:
+    build:
+      context: ../apps/consumer
+      dockerfile: Dockerfile
+    depends_on:
+      - hydra
+      - keto
+      - oathkeeper-proxy
+    ports:
+      - "4477:4477"
+    environment:
+      - PORT=4477
+      - OAUTH2_AUTH_URL=http://localhost:4444/oauth2/auth
+      - OAUTH2_TOKEN_URL=http://hydra:4444/oauth2/token
+      - OAUTH2_CLIENT_ID=consumer-app
+      - OAUTH2_CLIENT_SECRET=consumer-secret
+      - OAUTH2_REDIRECT_URL=http://localhost:4477/auth/callback
+      - BACKEND_OATHKEEPER_URL=http://oathkeeper-proxy:4455/oathkeeper
+      - BACKEND_WARDEN_SUBJECT_URL=http://resource-server:4478/warden/subject
+      - BACKEND_WARDEN_TOKEN_URL=http://resource-server:4478/warden/token
+      - BACKEND_INTROSPECT_URL=http://resource-server:4478/introspect
+      - nodemon start
+
+  resource-server:
+    build:
+      context: ../apps/resource-server
+      dockerfile: Dockerfile
+    depends_on:
+      - hydra
+      - keto
+      - oathkeeper-proxy
+    ports:
+      - "4478:4478"
+    environment:
+      - PORT=4478
+      - OATHKEEPER_KEY_URL=http://oathkeeper-api:4456/.well-known/jwks.json
+      - OAUTH2_CLIENT_ID=introspection-app
+      - OAUTH2_CLIENT_SECRET=introspection-secret
+      - OAUTH2_TOKEN_URL=http://hydra:4444/oauth2/token
+      - OAUTH2_INTROSPECT_URL=http://hydra:4444/oauth2/introspect
+      - KETO_URL=http://keto:4466
+      - nodemon start
 
   postgresd:
     image: postgres:9.6

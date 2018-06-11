@@ -45,8 +45,9 @@ Typically, environment variables are prefixed with the service name they are use
 
 This repository provides several examples. Each example is documented in detail in the example's README.
 
-* [Full-stack](./hydra-keto-oathkeeper): This example sets up all ORY services, the exemplary User Login and Consent
-Application, the exemplary OAuth 2.0 [Consumer Application](#consumer-application), and an exemplary [Resource Server](#resource-server).
+* [Full Stack](./full-stack): This example sets up all ORY services, the exemplary User Login and Consent
+Application, the exemplary OAuth 2.0 [Consumer Application](#consumer-application), and an exemplary [Resource Server](#resource-server)
+as well as example policies and OAuth 2.0 Clients.
 * [Basic ORY Hydra setup](./hydra): This example sets up ORY Hydra and our exemplary User Login and Consent Application.
 It is the minimal required set up for ORY Hydra which you can use to start experimenting.
 * [Backwards-compatible template](./hydra-bc): This example provides a Docker Image that offers a backwards compatible
@@ -130,5 +131,5 @@ then run Docker Compose in the example you would wish to test and set the versio
 
 ```
 $ cd some/example
-$ HYDRA_VERSION=dev KETO_VERSION=dev OATHKEEPER_VERSION=dev docker-compose up --build -d
+$ LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=dev KETO_VERSION=dev OATHKEEPER_VERSION=dev docker-compose up --build -d
 ```

@@ -33,17 +33,17 @@ reset-hydra-bc: rm-hydra-bc start-hydra-bc
 
 ###
 
-start-hko:
-		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose up --build -d
+start-full-stack:
+		cd full-stack; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose up --build -d
 
-restart-hko:
-		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose restart
+restart-full-stack:
+		cd full-stack; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose restart
 
-rm-hko:
-		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose kill
-		cd hydra-keto-oathkeeper; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose rm -f
+rm-full-stack:
+		cd full-stack; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose kill
+		cd full-stack; LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=v1.0.0-beta.2 KETO_VERSION=v1.0.0-beta.2 OATHKEEPER_VERSION=v1.0.0-beta.2 docker-compose rm -f
 
-reset-hko: rm-hko start-hko
+reset-full-stack: rm-full-stack start-full-stack
 
 ###
 
