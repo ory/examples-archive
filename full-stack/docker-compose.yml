@@ -232,7 +232,7 @@ services:
     environment:
       - PORT=4478
       - OATHKEEPER_KEY_URL=http://oathkeeper-api:4456/.well-known/jwks.json
-      - OAUTH2_CLIENT_ID=introspection-app
+      - OAUTH2_CLIENT_ID=resource-server
       - OAUTH2_CLIENT_SECRET=introspection-secret
       - OAUTH2_TOKEN_URL=http://hydra:4444/oauth2/token
       - OAUTH2_INTROSPECT_URL=http://hydra:4444/oauth2/introspect
