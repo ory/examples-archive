@@ -10,6 +10,9 @@ examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY
 - [Overview](#overview)
   - [Scripts](#scripts)
 - [Examples](#examples)
+- [Apps](#apps)
+  - [Resource Server](#resource-server)
+  - [Consumer Application](#consumer-application)
 - [Development](#development)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -53,7 +56,7 @@ It is the minimal required set up for ORY Hydra which you can use to start exper
 * [Backwards-compatible template](./hydra-bc): This example provides a Docker Image that offers a backwards compatible
 (for versions 0.11.0 / 0.10.0) experience by combining ORY Oathkeeper, ORY Keto, and ORY Hydra in the same Docker Image.
 
-### Apps
+## Apps
 
 This repository contains two exemplary applications, both written in NodeJS with Express. The idea here is to show you the different ways you can
 authorize requests on both sides (consumer, resource server) and shows the difference in approaches of protecting your services
@@ -63,12 +66,13 @@ The application's code has been documented, and we encourage you to read it. Ple
 Passport.js) are built on open standards such as OAuth 2.0. If you do not write applications in NodeJS you will be able
 to find SDKs with similar functionality in other languages.
 
-Please also note that the code is making use of some [ES6 features](oauth2.jade), such as arrow functions, as well as
+Please note that the code is making use of some [ES6 features](oauth2.jade), such as arrow functions, as well as
 async/await. Additionally, don't be fooled by ~100 Lines of Code. We packed everything in one file so you have a better
 time navigating the source code. The most interesting files will be the ones contained in the `routes` directory.
-All other files are either boilerplate ExpressJS or HTML views.
+All other files are either boilerplate ExpressJS or HTML views, with minimal changes to the ExpressJS middleware
+in each respective `./app.js` file.
 
-#### Resource Server
+### Resource Server
 
 A resource server is an application that, for example, exposes a CRUD API for modifying blog articles.
 Resource servers are usually protected - you don't want a hacker to be able to delete all your blog articles -
@@ -93,7 +97,7 @@ is allowed to perform the request. It consists of two subroutes:
     provided credentials match the username/password pairs (`peter:password1`, `bob:password2`)
     and if so, asks the ORY Keto Warden API if the user (e.g. `peter`, `bob`, `alice`) is allowed to perform the action.
 
-#### Consumer Application
+### Consumer Application
 
 The [consumer application](./apps/consumer) is a web server that fetches data from the backend ("resource server")
 and displays it. In this particular case, the application makes requests to different [Resource Server](#resource-server) endpoints.
@@ -105,16 +109,6 @@ authorize requests on both sides (consumer, resource server).
 Some endpoints in the consumer application require a valid OAuth 2.0 Access Token from the user. When accessing one
 of those endpoints, you will be redirected to ORY Hydra and asked to login in and grant the application the required
 scopes. Make sure to **select all scopes** or the examples might not work.
-
-### Docker
-
-* [Full Ecosystem](./hydra-keto-oathkeeper): This example sets up OYR Hydra, ORY Keto, ORY Oathkeeper, an exemplary
-user login & consent application as well as a resource server and a client app.
-* [ORY Hydra and User Login & Consent Reference Implementation](./hydra): This example sets up OYR Hydra, an exemplary
-user login & consent application as well as a resource server and a client app.
-* [Backwards Compatible Template for ORY Hydra < 1.0.0](./hydra-bc): This example configures ORY Hydra, ORY Oathkeeper,
-and ORY Keto in such a way that the APIs mimic the APIs from versions prior to ORY Hydra 1.0.0. This example will
-only be interesting if you were using ORY Hydra beofre the 1.0 release.
 
 ## Development
 
