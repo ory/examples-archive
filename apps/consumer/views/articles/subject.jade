@@ -1,0 +1,46 @@
+extends ../layout
+
+block content
+    h1= pageTitle
+    p
+        a(href="/") Go back
+
+    p
+        | This endpoint makes several requests to the backend ("resource server"). You can see the results below!
+
+    hr
+    div
+        h2 Request as user peter
+        p
+            | This consumer application makes a request with user <code>#{peter.auth.username}</code> and password <code>#{peter.auth.password}</code>
+            | We're making a request to the backend and are including the HTTP Basic Authorization header:
+        h3 CURL Equivalent
+        pre
+            code curl -u #{peter.auth.username}:#{peter.auth.password}  #{url}
+        h3 HTTP Response Body
+        pre
+            code #{peter.body}
+    hr
+    div
+        h2 Request as user bob
+        p
+            | This consumer application makes a request with user <code>#{bob.auth.username}</code> and password <code>#{bob.auth.password}</code>
+            | However, bob is not allowed to access this resource, so the request will be denied:
+        h3 CURL Equivalent
+        pre
+            code curl -u #{bob.auth.username}:#{bob.auth.password}  #{url}
+        h3 HTTP Response Body
+        pre
+            code #{bob.body}
+    hr
+    div
+        h2 Request as no user
+        p
+            | This consumer application makes a request without the HTTP Basic Authorization header:
+        h3 CURL Equivalent
+        pre
+            code curl #{url}
+        h3 HTTP Response Body
+        pre
+            code #{empty.body}
+    hr

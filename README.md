@@ -10,13 +10,9 @@ examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY
 - [Overview](#overview)
   - [Scripts](#scripts)
 - [Examples](#examples)
-  - [Backwards Compatible Template for ORY Hydra < 1.0.0](#backwards-compatible-template-for-ory-hydra--100)
-    - [Running the Example](#running-the-example)
-    - [Architecture](#architecture)
-  - [Full Ecosystem](#full-ecosystem)
-    - [Running the Example](#running-the-example-1)
-    - [Architecture](#architecture-1)
-  - [ORY Hydra and User Login & Consent Reference Implementation](#ory-hydra-and-user-login-&-consent-reference-implementation)
+- [Apps](#apps)
+  - [Resource Server](#resource-server)
+  - [Consumer Application](#consumer-application)
 - [Development](#development)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -32,12 +28,6 @@ Each example typically consists of these parts:
 
 Please be aware that **you can't run multiple examples at once as ports will clash**. Use `make rm-<example-name>` to
 kill and remove the containers of a running example before starting up another one.
-
-Before you run any of the examples, run
-
-```
-$ make pull
-```
 
 ### Scripts
 
@@ -56,152 +46,69 @@ Typically, environment variables are prefixed with the service name they are use
 
 ## Examples
 
-### Backwards Compatible Template for ORY Hydra < 1.0.0
+This repository provides several examples. Each example is documented in detail in the example's README.
 
-This example sets up ORY Hydra, ORY Oathkeeper, and ORY Keto in a way that makes the deployment fully backwards compatible
-with the access control concept of ORY Hydra < 1.0.0. It includes the Warden API, the Waden Group API, and protects
-ORY Hydra's endpoints using OAuth 2.0 Access Tokens and Access Control Policies.
+* [Full Stack](./full-stack): This example sets up all ORY services, the exemplary User Login and Consent
+Application, the exemplary OAuth 2.0 [Consumer Application](#consumer-application), and an exemplary [Resource Server](#resource-server)
+as well as example policies and OAuth 2.0 Clients.
+* [Basic ORY Hydra setup](./hydra): This example sets up ORY Hydra and our exemplary User Login and Consent Application.
+It is the minimal required set up for ORY Hydra which you can use to start experimenting.
+* [Backwards-compatible template](./hydra-bc): This example provides a Docker Image that offers a backwards compatible
+(for versions 0.11.0 / 0.10.0) experience by combining ORY Oathkeeper, ORY Keto, and ORY Hydra in the same Docker Image.
 
-You should use this example only if you are upgrading from ORY Hydra < 1.0.0 and rely on its internal access control.
+## Apps
 
-#### Running the Example
+This repository contains two exemplary applications, both written in NodeJS with Express. The idea here is to show you the different ways you can
+authorize requests on both sides (consumer, resource server) and shows the difference in approaches of protecting your services
+with ORY Keto, ORY Oathkeeper, ORY Hydra, or any combination of the three.
 
-Run this example with:
+The application's code has been documented, and we encourage you to read it. Please note that almost all SDKs used (like
+Passport.js) are built on open standards such as OAuth 2.0. If you do not write applications in NodeJS you will be able
+to find SDKs with similar functionality in other languages.
 
-```
-$ make pull
-$ make start-hydra-bc
-```
+Please note that the code is making use of some [ES6 features](oauth2.jade), such as arrow functions, as well as
+async/await. Additionally, don't be fooled by ~100 Lines of Code. We packed everything in one file so you have a better
+time navigating the source code. The most interesting files will be the ones contained in the `routes` directory.
+All other files are either boilerplate ExpressJS or HTML views, with minimal changes to the ExpressJS middleware
+in each respective `./app.js` file.
 
-Please be patient. In the background the system will boot a PostgreSQL database, execute SQL migrations for two services, then create
-several configuration items. This might take up to 5 minutes, depending on your system. While you wait or when having trouble, you may want
-to check `docker logs hydra-bc_postgresd_1`, `docker logs hydra-bc_keto-migrate_1`, `docker logs hydra-bc_hydra-migrate_1`,
-and `docker logs hydra-bc_services_1`.
+### Resource Server
 
-Once you are confident that everything is loaded (you're not seeing any error messages), try to run:
+A resource server is an application that, for example, exposes a CRUD API for modifying blog articles.
+Resource servers are usually protected - you don't want a hacker to be able to delete all your blog articles -
+and require valid credentials (authentication) as well as a certain permission (e.g. alice is allowed to modify this article)
+in order to execute the action.
 
-```
-$ curl http://localhost:4444/clients
-$ curl http://localhost:4466/policies
-$ curl http://localhost:4456/rules
-```
+There are different types of credentials (Cookie, JSON Web Token, OAuth 2.0 Access Token, ...) that can be used to protect
+a resource server. Therefore, the [resource server](./apps/resource-server) has several different routes:
 
-To perform - for example - the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
+* [/introspect](./apps/resource-server/routes/introspect): This route requires that an OAuth 2.0 Access Token
+is included in the HTTP header ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) and uses the
+[OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) flow to validate the token.
+* [/oathkeeper](./apps/resource-server/routes/oathkeeper): This route also accepts a bearer token
+([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) but this time it has to be a JSON Web Token
+signed by ORY Oathkeeper.
+* [/warden/](./apps/resource-server/routes/warden): This route uses the ORY Keto Warden API to check if a request
+is allowed to perform the request. It consists of two subroutes:
+  * `/warden/access-token`: This endpoint requires an OAuth 2.0 Access Token in the HTTP header
+    ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) and checks if the token's subject is allowed
+    to perform the requested action using ORY Keto.
+  * `/warden/subject`: This endpoint requires HTTP Basic Auth (`Authorization: basic ...`) and checks if the
+    provided credentials match the username/password pairs (`peter:password1`, `bob:password2`)
+    and if so, asks the ORY Keto Warden API if the user (e.g. `peter`, `bob`, `alice`) is allowed to perform the action.
 
-```
-$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4455
-```
+### Consumer Application
 
-You can achieve the same thing if you run the ORY Hydra CLI from Docker, but you will have to figure out yourself how
-to connect the containers... ;)
+The [consumer application](./apps/consumer) is a web server that fetches data from the backend ("resource server")
+and displays it. In this particular case, the application makes requests to different [Resource Server](#resource-server) endpoints.
 
-#### Architecture
+The consumer application has several routes (e.g. `/articles/secure-backend-with-oauth2-token-introspection`) which use
+different endpoints at the [Resource Server](#resource-server). The idea here is to show you the different ways you can
+authorize requests on both sides (consumer, resource server).
 
-![Docker Container Architecture](./hydra-bc/docs/container-arch.png)
-
-This example has three docker containers:
-
-* A PostgreSQL database for ORY Hydra and ORY Keto.
-* Our reference [login and consent provider](https://github.com/ory/hydra-login-consent-node) exposed at port `3000`.
-* A docker container runs `supervisord` which is configured to run these services:
-  * `hydra serve --dangerous-force-http` which is exposed directly (without access control) at port `4444`.
-  * `oathkeeper serve proxy` which is exposed at port `4455`. You can access all other services through this port, but must
-  pass access control using OAuth 2.0 Access Tokens. This endpoint resembles ORY Hydra prior to 1.0.0.
-  * `oathkeeper serve api` exposed at port `4456`. This endpoint lets you manage ORY Oathkeeper if you need to. Be aware
-  that this service is not configured to use the database. Every time you restart the container, you will have to redo
-  all changes made.
-  * `keto serve` exposed at port `4466` without access control.
-  * A script that loads all configuration items from the `./config` directory and imports ORY Hydra OAuth 2.0 Clients, ORY Keto Access Control Policies, and
-  ORY Oathkeeper Access Rules to each respective service.
-
-If you intend to upgrade an existing database installation, please read the [ORY Hydra Upgrade Guide](https://github.com/ory/hydra/blob/master/UPGRADE.md)
-to learn how to achieve that.
-
-It is recommended to check out the configuration items in the `./config` directory as it will probably also help you
-understand the system better.
-
-The `./supervisord.conf` contains the configuration for `supervisord`. You can check it out if you want to learn how
-each service environment is set up. The supervisor set up needs a few plugins (fail on repeated errors and prefix output logs)
-in order to work properly. We'd like to move away from `supervisord` at some point, but for now it's the best tool we
-have for the job. On the downside, `python3` and `pip` are installed to execute the plugins.
-
-If you intend to run a system based on this example in production, do not expose any port other than `4455` to the open internet.
-All other ports are *completely unprotected*.
-
-### Full Ecosystem
-
-This boots up all services (ORY Oathkeeper, ORY Hydra, ORY Keto) and creates the respective database schemas.
-
-#### Running the Example
-
-Run this example with:
-
-```
-$ make pull
-$ make start-hko
-```
-
-Please be patient. In the background the system will boot a PostgreSQL database, execute SQL migrations for two services, then create
-several configuration items. This might take up to 5 minutes, depending on your system. While you wait or when having trouble, you may want
-to check `docker logs hydra-bc_postgresd_1`, `docker logs hydra-bc_keto-migrate_1`, `docker logs hydra-bc_oathkeeper-migrate_1`, `docker logs hydra-bc_hydra-migrate_1`,
-and `docker logs hydra-bc_services_1`.
-
-Once you are confident that everything is loaded (you're not seeing any error messages), try to run:
-
-```
-$ curl http://localhost:4444/clients
-$ curl http://localhost:4456/rules
-$ curl http://localhost:4466/policies
-```
-
-You should see the preconfigured settings and no errors.
-
-To perform the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
-
-```
-$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444
-```
-
-#### Architecture
-
-This example has three docker containers:
-
-* A PostgreSQL database for ORY Hydra, ORY Keto, ORY Oathkeeper.
-* Our reference [login and consent provider](https://github.com/ory/hydra-login-consent-node) exposed at port `3000`.
-* A docker container runs `supervisord` which is configured to run these services:
-  * `hydra serve --dangerous-force-http` which is exposed directly (without access control) at port `4444`.
-  * `oathkeeper serve proxy` which is exposed at port `4455`.
-  * `oathkeeper serve api` exposed at port `4456`. This endpoint lets you manage ORY Oathkeeper if you need to. Be aware
-  that this service is not configured to use the database. Every time you restart the container, you will have to redo
-  all changes made.
-  * `keto serve` exposed at port `4466` without access control.
-  * A script that loads all configuration items from the `./config` directory and imports ORY Hydra OAuth 2.0 Clients, ORY Keto Access Control Policies, and
-  ORY Oathkeeper Access Rules to each respective service.
-
-The `./supervisord.conf` contains the configuration for `supervisord`. You can check it out if you want to learn how
-each service environment is set up. The supervisor set up needs a few plugins (fail on repeated errors and prefix output logs)
-in order to work properly. We'd like to move away from `supervisord` at some point, but for now it's the best tool we
-have for the job. On the downside, `python3` and `pip` are installed to execute the plugins.
-
-If you intend to run a system based on this example in production, be aware that none of the ports (except the Oathkeeper Proxy)
-should be exposed directly to the open internet, as some of the endpoint expose administrative features.
-
-### ORY Hydra and User Login & Consent Reference Implementation
-
-This example sets up ORY Hydra and our [User Login and Consent reference implementation](https://github.com/ory/hydra-login-consent-node).
-It works very similar to the other examples as it provides a custom Dockerfile and loads supervisord in order to import
-the ORY Hydra clients.
-
-```
-$ make pull
-$ make start-hydra
-```
-
-To perform - for example - the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
-
-```
-$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444
-```
+Some endpoints in the consumer application require a valid OAuth 2.0 Access Token from the user. When accessing one
+of those endpoints, you will be redirected to ORY Hydra and asked to login in and grant the application the required
+scopes. Make sure to **select all scopes** or the examples might not work.
 
 ## Development
 
@@ -218,5 +125,5 @@ then run Docker Compose in the example you would wish to test and set the versio
 
 ```
 $ cd some/example
-$ HYDRA_VERSION=dev KETO_VERSION=dev OATHKEEPER_VERSION=dev docker-compose up --build -d
+$ LOGIN_CONSENT_VERSION=v1.0.0-beta.2 HYDRA_VERSION=dev KETO_VERSION=dev OATHKEEPER_VERSION=dev docker-compose up --build -d
 ```

@@ -1,0 +1,35 @@
+extends layout
+
+block content
+    p
+        | This is the front page of the consumer app. There are several example included in this app:
+    ul
+        if (backends.oathkeeper)
+            li
+                a(href="/articles/secure-backend-with-ory-oathkeeper")
+                    code /articles/secure-backend-with-ory-oathkeeper
+                | : Opening this article will first request an OAuth 2.0 Access Token from you and then make requests
+                | to the backend ("resource server") which is protected with ORY Oathkeeper. The backend will return
+                | some data this app then renders.
+        if (backends.introspect)
+            li
+                a(href="/articles/secure-backend-with-oauth2-token-introspection")
+                    code /articles/secure-backend-with-oauth2-token-introspection
+                | : Opening this article will first request an OAuth 2.0 Access Token from you and then make requests
+                | to the backend ("resource server"). The backend performs the OAuth 2.0 Token Introspection flow to validate
+                | the access token and, if the token is valid, will return some data.
+        if (backends.warden.token)
+            li
+                a(href="/articles/secure-backend-with-ory-keto-oauth2-authorization")
+                    code /articles/secure-backend-with-ory-keto-oauth2-authorization
+                | : Opening this article will first request an OAuth 2.0 Access Token from you and then make requests
+                | to the backend ("resource server"). The backend uses the ORY Keto Warden API (more specifically:
+                | the OAuth 2.0 Access Token endpoint) to check if the access token is valid and whether or not the user
+                | is actually allowed to perform the request.
+        if (backends.warden.subject)
+            li
+                a(href="/articles/secure-backend-with-ory-keto-simple")
+                    code /articles/secure-backend-with-ory-keto-simple
+                | : Opening this article will make a request to the backend ("resource server"). The resource server
+                | uses the ORY Keto Warden API to check if the user (taken from the query, e.g. <code>/articles/secure-backend-with-ory-keto-simple?user=alice</code>)
+                | is allowed to perform this action.

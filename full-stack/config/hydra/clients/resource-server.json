@@ -1,0 +1,8 @@
+{
+  "id": "resource-server",
+  "description": "This client will be used by the exemplary resource serve to introspect access tokens.",
+  "client_secret": "introspection-secret",
+  "scope": "",
+  "grant_types": ["client_credentials"],
+  "response_types": ["token"]
+}

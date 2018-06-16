@@ -1,0 +1,37 @@
+[
+  {
+    "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:resource-server-oathkeeper",
+    "upstream": {
+      "url": "${RESOURCE_SERVER_URL}/"
+    },
+    "match": {
+      "url": "${OATHKEEPER_PROXY_URL}/oathkeeper",
+      "methods": [
+        "GET"
+      ]
+    },
+    "authenticators": [
+      {
+        "handler": "oauth2_introspection",
+        "config": {
+          "required_scope": [
+            "articles.read"
+          ]
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "keto_warden",
+      "config": {
+        "required_action": "blog:read",
+        "required_resource": "blog:posts:1"
+      }
+    },
+    "credentials_issuer": {
+      "handler": "id_token",
+      "config": {
+        "aud": []
+      }
+    }
+  }
+]
