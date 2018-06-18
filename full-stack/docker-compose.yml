@@ -183,15 +183,6 @@ services:
     environment:
       - HYDRA_URL=http://hydra:4444
       - NODE_TLS_REJECT_UNAUTHORIZED=0
-    image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
-    ports:
-      - "4488:4488"
-    restart: on-failure
-
-  identity-provider:
-    environment:
-      - HYDRA_URL=http://hydra:4444
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
       - PORT=4488
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     ports:
