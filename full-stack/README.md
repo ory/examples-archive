@@ -8,7 +8,6 @@ boots the exemplary consumer application and resource server.
 Run this example with:
 
 ```
-$ make pull
 $ make start-full-stack
 ```
 

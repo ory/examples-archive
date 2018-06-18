@@ -5,7 +5,6 @@ It works very similar to the other examples as it provides a custom Dockerfile a
 the ORY Hydra clients.
 
 ```
-$ make pull
 $ make start-hydra
 ```
 

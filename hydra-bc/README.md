@@ -11,7 +11,6 @@ You should use this example only if you are upgrading from ORY Hydra < 1.0.0 and
 Run this example with:
 
 ```
-$ make pull
 $ make start-hydra-bc
 ```
 
