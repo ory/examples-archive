@@ -170,7 +170,7 @@ services:
       - "OATHKEEPER_RESOURCE_PREFIX=resources:oathkeeper:"
       - "OATHKEEPER_ACTION_PREFIX=actions:oathkeeper:"
       - "KETO_RESOURCE_PREFIX=resources:keto:"
-      - "KETO_ACTION_PREFIX=actions:keto;"
+      - "KETO_ACTION_PREFIX=actions:keto:"
 
       - OATHKEEPER_HYDRA_JWK_SET_ID=jwk:oathkeeper
       - OATHKEEPER_HYDRA_CLIENT_ID=clients:oathkeeper-client
