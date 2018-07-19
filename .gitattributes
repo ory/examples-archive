@@ -1,0 +1,2 @@
+# Never do crlf translation of bash scripts
+*.sh -crlf
