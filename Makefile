@@ -30,6 +30,20 @@ reset-hydra-bc: rm-hydra-bc start-hydra-bc
 
 ###
 
+start-oathkeeper-ambassador:
+		cd oathkeeper-ambassador; OATHKEEPER_VERSION=unstable AMBASSADOR_VERSION=0.36.0 docker-compose up --build -d
+
+restart-oathkeeper-ambassador:
+		cd oathkeeper-ambassador; OATHKEEPER_VERSION=unstable AMBASSADOR_VERSION=0.36.0 docker-compose restart
+
+rm-oathkeeper-ambassador:
+		cd oathkeeper-ambassador; OATHKEEPER_VERSION=unstable AMBASSADOR_VERSION=0.36.0 docker-compose kill
+		cd oathkeeper-ambassador; OATHKEEPER_VERSION=unstable AMBASSADOR_VERSION=0.36.0 docker-compose rm -f
+
+reset-oathkeeper-ambassador: rm-oathkeeper-ambassador start-oathkeeper-ambassador
+
+###
+
 start-full-stack:
 		cd full-stack; LOGIN_CONSENT_VERSION=v1.0.0-beta.4 HYDRA_VERSION=v1.0.0-beta.4 KETO_VERSION=v1.0.0-beta.4 OATHKEEPER_VERSION=v1.0.0-beta.4 docker-compose up --build -d
 
