@@ -2,7 +2,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:health:status",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/health/status",
@@ -16,7 +16,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"

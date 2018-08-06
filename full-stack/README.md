@@ -19,7 +19,7 @@ and `docker logs hydra-bc_services_1`.
 Once you are confident that everything is loaded (you're not seeing any error messages), try to run:
 
 ```
-$ curl http://localhost:4444/clients
+$ curl http://localhost:4445/clients
 $ curl http://localhost:4456/rules
 $ curl http://localhost:4466/policies
 ```
@@ -29,7 +29,7 @@ You should see the preconfigured settings and no errors.
 To perform the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
 
 ```
-$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444
+$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444 --port 5555
 ```
 
 Next, you should open [http://localhost:4477](http://localhost:4477) and check out the different examples.
@@ -40,7 +40,7 @@ This example has three docker containers:
 
 * A PostgreSQL database for ORY Hydra, ORY Keto, ORY Oathkeeper.
 * Our reference [login and consent provider](https://github.com/ory/hydra-login-consent-node) exposed at port `3000`.
-* `hydra serve --dangerous-force-http` which is exposed directly (without access control) at port `4444`.
+* `hydra serve all --dangerous-force-http` which is exposed directly (without access control) at port `4444` an dport `4445`.
 * `oathkeeper serve proxy` which is exposed at port `4455`.
 * `oathkeeper serve api` exposed at port `4456`. This endpoint lets you manage ORY Oathkeeper if you need to. Be aware
   that this service is not configured to use the database. Every time you restart the container, you will have to redo

@@ -22,7 +22,8 @@ and `docker logs hydra-bc_services_1`.
 Once you are confident that everything is loaded (you're not seeing any error messages), try to run:
 
 ```
-$ curl http://localhost:4444/clients
+$ curl http://localhost:4444/.well-known/jwks.json
+$ curl http://localhost:4445/clients
 $ curl http://localhost:4466/policies
 $ curl http://localhost:4456/rules
 ```
@@ -45,7 +46,7 @@ This example has three docker containers:
 * A PostgreSQL database for ORY Hydra and ORY Keto.
 * Our reference [login and consent provider](https://github.com/ory/hydra-login-consent-node) exposed at port `3000`.
 * A docker container runs `supervisord` which is configured to run these services:
-  * `hydra serve --dangerous-force-http` which is exposed directly (without access control) at port `4444`.
+  * `hydra serve all --dangerous-force-http` which is exposed directly (without access control) at port `4444` and `4445`.
   * `oathkeeper serve proxy` which is exposed at port `4455`. You can access all other services through this port, but must
   pass access control using OAuth 2.0 Access Tokens. This endpoint resembles ORY Hydra prior to 1.0.0.
   * `oathkeeper serve api` exposed at port `4456`. This endpoint lets you manage ORY Oathkeeper if you need to. Be aware

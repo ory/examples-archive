@@ -11,5 +11,5 @@ $ make start-hydra
 To perform - for example - the OAuth 2 Authorize Code Flow, install ORY Hydra >= 1.0.0 locally and run:
 
 ```
-$ hydra token user --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444
+$ hydra token user --port 5555 --client-id example-auth-code --client-secret secret --endpoint http://localhost:4444 --skip-tls-verify
 ```

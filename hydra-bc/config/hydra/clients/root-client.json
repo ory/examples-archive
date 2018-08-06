@@ -1,5 +1,5 @@
 {
-  "id": "${HYDRA_SUBJECT_PREFIX}${HYDRA_FORCE_ROOT_CLIENT_ID}",
+  "client_id": "${HYDRA_SUBJECT_PREFIX}${HYDRA_FORCE_ROOT_CLIENT_ID}",
   "client_secret": "${HYDRA_FORCE_ROOT_CLIENT_SECRET}",
   "scope": "hydra hydra.*",
   "grant_types": ["client_credentials"],

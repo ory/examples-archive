@@ -16,7 +16,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -40,7 +40,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -64,7 +64,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -87,7 +87,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -110,7 +110,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -133,7 +133,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -156,7 +156,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -165,7 +165,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:introspect",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/oauth2/introspect",
@@ -205,7 +205,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:flush",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/oauth2/flush",

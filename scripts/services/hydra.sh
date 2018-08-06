@@ -9,7 +9,7 @@ client_path="$path/clients/*.json"
 
 echo "Deleting clients in $client_path..."
 for filename in $client_path; do
-    id=$(getid $filename)
+    id=$(getclientid $filename)
     (set -x; hydra clients delete $id || true)
 done
 echo "Deleted all clients in $client_path!"

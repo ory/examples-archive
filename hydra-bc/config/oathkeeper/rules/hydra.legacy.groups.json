@@ -2,7 +2,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:list",
     "upstream": {
-      "url": "${HYDRA_URL}/roles",
+      "url": "${KETO_URL}/roles",
       "strip_path": "/warden/groups"
     },
     "match": {
@@ -35,7 +35,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:create",
     "upstream": {
-      "url": "${HYDRA_URL}/roles",
+      "url": "${KETO_URL}/roles",
       "strip_path": "/warden/groups"
     },
     "match": {
@@ -68,7 +68,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:get",
     "upstream": {
-      "url": "${HYDRA_URL}/roles",
+      "url": "${KETO_URL}/roles",
       "strip_path": "/warden/groups"
     },
     "match": {
@@ -101,7 +101,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:delete",
     "upstream": {
-      "url": "${HYDRA_URL}/roles",
+      "url": "${KETO_URL}/roles",
       "strip_path": "/warden/groups"
     },
     "match": {
@@ -134,7 +134,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:members:add",
     "upstream": {
-      "url": "${HYDRA_URL}/roles",
+      "url": "${KETO_URL}/roles",
       "strip_path": "/warden/groups"
     },
     "match": {
@@ -168,7 +168,7 @@
 
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:roles-legacy:members:remove",
     "upstream": {
-      "url": "${HYDRA_URL}/roles",
+      "url": "${KETO_URL}/roles",
       "strip_path": "/warden/groups"
     },
     "match": {

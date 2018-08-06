@@ -1,15 +1,3 @@
-###########################################################################
-#######             FOR DEMONSTRATION PURPOSES ONLY                 #######
-###########################################################################
-#                                                                         #
-# If you have not yet read the tutorial, do so now:                       #
-#  https://ory-am.gitbooks.io/hydra/content/tutorial.html                 #
-#                                                                         #
-# This set up is only for demonstration purposes. The login               #
-# endpoint can only be used if you follow the steps in the tutorial.      #
-#                                                                         #
-###########################################################################
-
 version: '2'
 
 services:
@@ -33,20 +21,16 @@ services:
         - HYDRA_VERSION=$HYDRA_VERSION
     links:
       - postgresd:postgresd
-#     Uncomment the following line to use mysql instead.
-#      - mysqld:mysqld
     depends_on:
       - hydra-migrate
     volumes:
       - ../scripts:/scripts
     ports:
       - "4444:4444"
-      - "4455:4455"
-      - "4456:4456"
-      - "4466:4466"
+      - "4445:4445"
     environment:
       # Debuggin
-      - LOG_LEVEL=info
+      - LOG_LEVEL=debug
       - HYDRA_OAUTH2_SHARE_ERROR_DEBUG=1
 
       # Essential configuration for Hydra
@@ -58,6 +42,7 @@ services:
 
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
       - HYDRA_URL=http://localhost:4444
+      - HYDRA_ADMIN_URL=http://localhost:4445
 
       # This sets the prefix for all resource, action, and subject names. Be aware that this prefix is automatically
       # applied to all OAuth2 Clients as well.
@@ -67,7 +52,7 @@ services:
 
   identity-provider:
     environment:
-      - HYDRA_URL=http://services:4444
+      - HYDRA_URL=http://services:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     links:
@@ -82,9 +67,3 @@ services:
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=accesscontroldb
-
-#  Uncomment the following section to use mysql instead.
-#  mysqld:
-#    image: mysql:5.7
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=secret
