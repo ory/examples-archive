@@ -28,6 +28,15 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Redirects from 127.0.0.1 to localhost which prevents https://github.com/ory/examples/issues/17
+app.use((req, res, next) => {
+  if (req.hostname === '127.0.0.1') {
+    res.redirect(req.protocol + '://' + req.get('Host').replace('127.0.0.1', 'localhost') + req.originalUrl, 302)
+    return
+  }
+  next()
+})
+
 app.use('/', routes)
 
 // catch 404 and forward to error handler
