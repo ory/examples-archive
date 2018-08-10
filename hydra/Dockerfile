@@ -18,6 +18,7 @@ RUN pip install --upgrade pip
 
 # This is the ORY Hydra port
 EXPOSE 4444
+EXPOSE 4445
 
 COPY --from=0 /usr/bin/hydra /usr/bin/hydra
 

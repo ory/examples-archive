@@ -2,7 +2,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:get",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/oauth2/consent/requests/<[^/]+>",
@@ -34,7 +34,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:accept",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/oauth2/consent/requests/<[^/]+>/accept",
@@ -66,7 +66,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:oauth2:consent:reject",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/oauth2/consent/requests/<[^/]+>/reject",

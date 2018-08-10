@@ -54,6 +54,7 @@ services:
       - ../scripts:/scripts
     ports:
       - "4444:4444"
+      - "4445:4445"
       - "4455:4455"
       - "4456:4456"
       - "4466:4466"
@@ -78,6 +79,7 @@ services:
 
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
       - HYDRA_URL=http://localhost:4444
+      - HYDRA_ADMIN_URL=http://localhost:4445
       - KETO_URL=http://localhost:4466
       - OATHKEEPER_API_URL=http://localhost:4456
       - OATHKEEPER_PROXY_URL=http://localhost:4455
@@ -110,7 +112,7 @@ services:
 
   identity-provider:
     environment:
-      - HYDRA_URL=http://services:4444
+      - HYDRA_URL=http://services:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     links:

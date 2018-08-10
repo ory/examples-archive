@@ -1,5 +1,5 @@
 {
-  "id": "example-auth-code",
+  "client_id": "example-auth-code",
   "description": "This client can be used to perform (exemplarily) the OAuth 2.0 Authorize Code Flow.",
   "client_secret": "secret",
   "scope": "openid offline",
@@ -12,7 +12,7 @@
     "id_token"
   ],
   "redirect_uris": [
-    "http://localhost:4445/callback",
-    "http://127.0.0.1:4445/callback"
+    "http://localhost:5555/callback",
+    "http://127.0.0.1:5555/callback"
   ]
 }

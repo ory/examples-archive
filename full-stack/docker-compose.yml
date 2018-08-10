@@ -51,10 +51,11 @@ services:
       - postgresd:postgresd
     ports:
       - "4444:4444"
+      - "4445:4445"
     depends_on:
       - hydra-migrate
     command:
-      serve --dangerous-force-http
+      serve all --dangerous-force-http
     environment:
       - LOG_LEVEL=debug
       - SYSTEM_SECRET=youReallyNeedToChangeThis
@@ -85,9 +86,7 @@ services:
       - OATHKEEPER_API_URL=http://oathkeeper-api:4456
       - CREDENTIALS_ISSUER_ID_TOKEN_ALGORITHM=ory-hydra
       - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_JWK_SET_ID=resources:hydra:jwk:oathkeeper
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_CLIENT_ID=subjects:hydra:clients:oathkeeper-client
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_CLIENT_SECRET=dummy-oathkeeper-secret
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_URL=http://hydra:4444
+      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_URL=http://hydra:4445
       - CREDENTIALS_ISSUER_ID_TOKEN_LIFESPAN=1h
       - CREDENTIALS_ISSUER_ID_TOKEN_ISSUER=http://oathkeeper-api:4456
       - AUTHORIZER_KETO_WARDEN_KETO_URL=http://keto:4466
@@ -95,7 +94,7 @@ services:
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_ID=subjects:hydra:clients:oathkeeper-client
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_SECRET=dummy-oathkeeper-secret
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_TOKEN_URL=http://hydra:4444/oauth2/token
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_INTROSPECT_URL=http://hydra:4444/oauth2/introspect
+      - AUTHENTICATOR_OAUTH2_INTROSPECTION_INTROSPECT_URL=http://hydra:4445/oauth2/introspect
       - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL="http://hydra:4444/oauth2/token
     restart: on-failure
 
@@ -114,11 +113,10 @@ services:
       - PORT=4456
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
       - ISSUER_URL=http://localhost:4455/
+      - AUTHORIZER_KETO_WARDEN_KETO_URL=http://keto:4466
       - CREDENTIALS_ISSUER_ID_TOKEN_ALGORITHM=ory-hydra
       - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_JWK_SET_ID=resources:hydra:jwk:oathkeeper
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_CLIENT_ID=subjects:hydra:clients:oathkeeper-client
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_CLIENT_SECRET=dummy-oathkeeper-secret
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_URL=http://hydra:4444
+      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_URL=http://hydra:4445
     restart: on-failure
 
   keto:
@@ -136,7 +134,7 @@ services:
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_ID=subjects:hydra:clients:keto-client
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_SECRET=dummy-keto-secret
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_TOKEN_URL=http://hydra:4444/oauth2/token
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4444/oauth2/introspect
+      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
       - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
     restart: on-failure
 
@@ -157,6 +155,7 @@ services:
     environment:
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
       - HYDRA_URL=http://hydra:4444
+      - HYDRA_ADMIN_URL=http://hydra:4445
       - KETO_URL=http://keto:4466
       - RESOURCE_SERVER_URL=http://resource-server:4478
       - OATHKEEPER_API_URL=http://oathkeeper-api:4456
@@ -181,7 +180,7 @@ services:
 
   identity-provider:
     environment:
-      - HYDRA_URL=http://hydra:4444
+      - HYDRA_URL=http://hydra:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
       - PORT=4488
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
@@ -225,10 +224,7 @@ services:
     environment:
       - PORT=4478
       - OATHKEEPER_KEY_URL=http://oathkeeper-api:4456/.well-known/jwks.json
-      - OAUTH2_CLIENT_ID=resource-server
-      - OAUTH2_CLIENT_SECRET=introspection-secret
-      - OAUTH2_TOKEN_URL=http://hydra:4444/oauth2/token
-      - OAUTH2_INTROSPECT_URL=http://hydra:4444/oauth2/introspect
+      - OAUTH2_INTROSPECT_URL=http://hydra:4445/oauth2/introspect
       - KETO_URL=http://keto:4466
       - nodemon start
 

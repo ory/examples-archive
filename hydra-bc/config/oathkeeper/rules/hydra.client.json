@@ -2,7 +2,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:list",
     "upstream": {
-      "url": "${KETO_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/clients",
@@ -34,7 +34,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:create",
     "upstream": {
-      "url": "${KETO_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/clients",
@@ -66,7 +66,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:update",
     "upstream": {
-      "url": "${KETO_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/clients/<.+>",
@@ -98,7 +98,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:get",
     "upstream": {
-      "url": "${KETO_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/clients/<.+>",
@@ -130,7 +130,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:clients:delete",
     "upstream": {
-      "url": "${KETO_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/clients/<.+>",

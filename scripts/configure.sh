@@ -23,10 +23,12 @@ fi
 echo "Executing bootstrap scripts..."
 
 hydra_url=${HYDRA_URL:=undefined}
+hydra_admin_url=${HYDRA_ADMIN_URL:=undefined}
 oathkeeper_url=${OATHKEEPER_API_URL:=undefined}
 keto_url=${KETO_URL:=undefined}
 
 export HYDRA_URL=${hydra_url%/}/
+export HYDRA_ADMIN_URL=${hydra_admin_url%/}/
 
 if [ -d "/config/hydra" ]; then
     backoff /scripts/services/hydra.sh "/config/hydra"

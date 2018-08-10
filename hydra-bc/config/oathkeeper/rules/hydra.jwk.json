@@ -2,7 +2,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:well-known",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/.well-known/jwks.json",
@@ -16,7 +16,7 @@
       }
     ],
     "authorizer": {
-      "handler": "noop"
+      "handler": "allow"
     },
     "credentials_issuer": {
       "handler": "noop"
@@ -25,7 +25,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:get-key",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<.+>",
@@ -57,7 +57,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:get-key-set",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
@@ -89,7 +89,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:create-key-set",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
@@ -121,7 +121,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:update-key-set",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
@@ -153,7 +153,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:update-key",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<[^/]+>",
@@ -185,7 +185,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:delete-key-set",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>",
@@ -217,7 +217,7 @@
   {
     "id": "${OATHKEEPER_RESOURCE_PREFIX}rules:hydra:keys:delete-key",
     "upstream": {
-      "url": "${HYDRA_URL}/"
+      "url": "${HYDRA_ADMIN_URL}/"
     },
     "match": {
       "url": "${OATHKEEPER_PROXY_URL}/keys/<[^/]+>/<[^/]+>",
