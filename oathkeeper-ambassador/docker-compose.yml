@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+
+  oathkeeper-migrate:
+    image: oryd/oathkeeper:$OATHKEEPER_VERSION
+    links:
+      - postgresd:postgresd
+    environment:
+      - LOG_LEVEL=debug
+    command:
+      migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+    restart: on-failure
+
+  oathkeeper-api:
+    image: oryd/oathkeeper:$OATHKEEPER_VERSION
+    links:
+      - postgresd:postgresd
+    ports:
+      - "4456:4456"
+    depends_on:
+      - oathkeeper-migrate
+    command:
+      serve api
+    environment:
+      - LOG_LEVEL=debug
+      - PORT=4456
+      - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      - CREDENTIALS_ISSUER_ID_TOKEN_HS256_SECRET=secret-for-jwt-id-token-signing-
+      - RULES_REFRESH_INTERVAL=2s
+      - CREDENTIALS_ISSUER_ID_TOKEN_JWK_REFRESH_INTERVAL=1m
+    restart: on-failure
+
+  ambassador:
+    build:
+      context: .
+      dockerfile: Dockerfile-ambassador
+      args:
+        - AMBASSADOR_VERSION=$AMBASSADOR_VERSION
+    links:
+      - oathkeeper-api:oathkeeper-api
+    ports:
+      - "8080:8080"
+
+  postgresd:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=accesscontroldb

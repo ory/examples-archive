@@ -1,0 +1,8 @@
+---
+apiVersion: ambassador/v0
+kind:  AuthService
+name:  authentication
+auth_service: "oathkeeper-api:4456"
+path_prefix: "/judge"
+allowed_headers:
+- "Authorization"

@@ -1,0 +1,22 @@
+[
+    {
+        "id": "quotm-service",
+        "match": {
+            "url": "http://localhost:8080/qotm</|>",
+            "methods": [
+                "GET"
+            ]
+        },
+        "authenticators": [
+            {
+                "handler": "noop"
+            }
+        ],
+        "authorizer": {
+            "handler": "allow"
+        },
+        "credentials_issuer": {
+            "handler": "noop"
+        }
+    }
+]

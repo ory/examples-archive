@@ -1,0 +1,5 @@
+FROM quay.io/datawire/ambassador:$AMBASSADOR_VERSION
+
+COPY ambassador /ambassador/ambassador-config
+
+ENTRYPOINT [ "./entrypoint.sh" ]
