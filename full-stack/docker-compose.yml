@@ -209,7 +209,6 @@ services:
       - BACKEND_WARDEN_SUBJECT_URL=http://resource-server:4478/warden/subject
       - BACKEND_WARDEN_TOKEN_URL=http://resource-server:4478/warden/token
       - BACKEND_INTROSPECT_URL=http://resource-server:4478/introspect
-      - nodemon start
 
   resource-server:
     build:

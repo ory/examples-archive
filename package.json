@@ -1,0 +1,20 @@
+{
+  "name": "ory-examples",
+  "version": "0.0.0",
+  "scripts": {
+    "test:watch": "cypress open",
+    "test": "cypress run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ory/examples.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/ory/examples/issues"
+  },
+  "homepage": "https://github.com/ory/examples#readme",
+  "devDependencies": {
+    "cypress": "^3.0.3"
+  }
+}
