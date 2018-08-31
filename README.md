@@ -1,5 +1,7 @@
 # ORY Ecosystem Deployment Examples
 
+[![CircleCI](https://circleci.com/gh/ory/examples.svg?style=shield)](https://circleci.com/gh/ory/examples)
+
 This repository contains deployment examples and templates for the ORY Ecosystem. This repository does not contain
 examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY Oathkeeper, and ORY Keto.
 
