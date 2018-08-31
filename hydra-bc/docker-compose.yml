@@ -76,6 +76,7 @@ services:
 
       # Set up URLs which will be used by configuration scripts and to wire everything together
       - OATHKEEPER_ISSUER_URL=http://localhost:4455/
+      - OATHKEEPER_ID_TOKEN_SECRET=arandomsecretarandomsecretarando
 
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
       - HYDRA_URL=http://localhost:4444
@@ -112,7 +113,7 @@ services:
 
   identity-provider:
     environment:
-      - HYDRA_URL=http://services:4445
+      - HYDRA_ADMIN_URL=http://services:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     links:

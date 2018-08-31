@@ -19,7 +19,7 @@ block content
             code curl -u #{peter.auth.username}:#{peter.auth.password}  #{url}
         h3 HTTP Response Body
         pre
-            code #{peter.body}
+            code#peter #{peter.body}
     hr
     div
         h2 Request as user bob
@@ -31,7 +31,7 @@ block content
             code curl -u #{bob.auth.username}:#{bob.auth.password}  #{url}
         h3 HTTP Response Body
         pre
-            code #{bob.body}
+            code#bob #{bob.body}
     hr
     div
         h2 Request as no user
@@ -42,5 +42,5 @@ block content
             code curl #{url}
         h3 HTTP Response Body
         pre
-            code #{empty.body}
+            code#empty #{empty.body}
     hr
