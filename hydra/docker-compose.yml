@@ -52,7 +52,7 @@ services:
 
   identity-provider:
     environment:
-      - HYDRA_URL=http://services:4445
+      - HYDRA_ADMIN_URL=http://services:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
     links:
