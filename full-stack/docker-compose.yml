@@ -86,16 +86,13 @@ services:
       - OATHKEEPER_API_URL=http://oathkeeper-api:4456
       - CREDENTIALS_ISSUER_ID_TOKEN_ALGORITHM=ory-hydra
       - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_JWK_SET_ID=resources:hydra:jwk:oathkeeper
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_URL=http://hydra:4445
+      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_ADMIN_URL=http://hydra:4445
       - CREDENTIALS_ISSUER_ID_TOKEN_LIFESPAN=1h
       - CREDENTIALS_ISSUER_ID_TOKEN_ISSUER=http://oathkeeper-api:4456
       - AUTHORIZER_KETO_WARDEN_KETO_URL=http://keto:4466
       - AUTHENTICATOR_ANONYMOUS_USERNAME=anonymous
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_ID=subjects:hydra:clients:oathkeeper-client
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_SECRET=dummy-oathkeeper-secret
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_TOKEN_URL=http://hydra:4444/oauth2/token
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_INTROSPECT_URL=http://hydra:4445/oauth2/introspect
-      - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL="http://hydra:4444/oauth2/token
+      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
+      - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
     restart: on-failure
 
   oathkeeper-api:
@@ -116,7 +113,11 @@ services:
       - AUTHORIZER_KETO_WARDEN_KETO_URL=http://keto:4466
       - CREDENTIALS_ISSUER_ID_TOKEN_ALGORITHM=ory-hydra
       - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_JWK_SET_ID=resources:hydra:jwk:oathkeeper
-      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_URL=http://hydra:4445
+      - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_ADMIN_URL=http://hydra:4445
+      - CREDENTIALS_ISSUER_ID_TOKEN_LIFESPAN=1h
+      - CREDENTIALS_ISSUER_ID_TOKEN_ISSUER=http://oathkeeper-api:4456
+      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
+      - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
     restart: on-failure
 
   keto:
@@ -131,11 +132,8 @@ services:
     environment:
       - LOG_LEVEL=debug
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_ID=subjects:hydra:clients:keto-client
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_CLIENT_SECRET=dummy-keto-secret
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_TOKEN_URL=http://hydra:4444/oauth2/token
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
       - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
+      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
     restart: on-failure
 
   configurator:
@@ -180,7 +178,7 @@ services:
 
   identity-provider:
     environment:
-      - HYDRA_URL=http://hydra:4445
+      - HYDRA_ADMIN_URL=http://hydra:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
       - PORT=4488
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
