@@ -1,10 +1,6 @@
-export const checkApi = (url, key, items) => {
-  fetch(url).then((res) => res.json()).then((body) => {
-    items.forEach((c) => {
-      expect(body.filter((item) => item[key] === c)).to.not.be.empty
-    })
-  })
-}
+export const checkApi = (url, key, items) => fetch(url)
+  .then((res) => res.json())
+  .then((body) => Promise.resolve(body.map((b) => b[key]).filter((id) => items.indexOf(id) === -1)))
 
 export const urls = {
   hydraAdmin: `http://${process.env.HYDRA_HOST || 'localhost'}:${process.env.HYDRA_ADMIN_PORT || 4445}`,

@@ -16,8 +16,8 @@ describe('full-stack', () => {
     cy.get('input[value="Allow access"]').click()
 
     cy.get('#with').should('to.contain', `"message": "Congratulations, you gained access to this endpoint!",`)
-    cy.get('#without').should('to.contain', `{"error":{"code":401,"status":"Unauthorized","message":"Access credentials are either expired or missing a scope"}}`)
-    cy.get('#invalid').should('to.contain', `{"error":{"code":401,"reason":"Access token introspection says token is not active","message":"The provided credentials are invalid, expired, or are not authorized to use the requested scope"}}`)
+    cy.get('#without').should('to.contain', `{"error":{"code":401,"status":"Unauthorized","message":"Access credentials are invalid"}}`)
+    cy.get('#invalid').should('to.contain', `{"error":{"code":403,"status":"Forbidden","reason":"Access token introspection says token is not active","message":"Access credentials are not sufficient to access this resource"}}`)
   })
 
   it('completes the second flow', () => {
