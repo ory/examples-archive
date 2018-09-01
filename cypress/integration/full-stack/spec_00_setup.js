@@ -1,4 +1,4 @@
-import { checkApi, urls } from "./common";
+import { checkApi, urls } from "../common";
 
 describe('environment', () => {
   it('should be able to fetch all the data from hydra', () => {
