@@ -41,17 +41,3 @@ rm-full-stack:
 		cd full-stack; LOGIN_CONSENT_VERSION=v1.0.0-beta.8 HYDRA_VERSION=v1.0.0-beta.8 KETO_VERSION=v1.0.0-beta.8 OATHKEEPER_VERSION=v1.0.0-beta.8 docker-compose rm -f
 
 reset-full-stack: rm-full-stack start-full-stack
-
-###
-
-start-hydra:
-		cd hydra; LOGIN_CONSENT_VERSION=v1.0.0-beta.8 HYDRA_VERSION=v1.0.0-beta.8 docker-compose up --build -d
-
-restart-hydra:
-		cd hydra; LOGIN_CONSENT_VERSION=v1.0.0-beta.8 HYDRA_VERSION=v1.0.0-beta.8 docker-compose restart
-
-rm-hydra:
-		cd hydra; LOGIN_CONSENT_VERSION=v1.0.0-beta.8 HYDRA_VERSION=v1.0.0-beta.8 docker-compose kill
-		cd hydra; LOGIN_CONSENT_VERSION=v1.0.0-beta.8 HYDRA_VERSION=v1.0.0-beta.8 docker-compose rm -f
-
-reset-hydra: rm-hydra start-hydra
