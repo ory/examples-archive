@@ -39,10 +39,10 @@ COPY --from=2 /usr/bin/oathkeeper /usr/bin/oathkeeper
 
 RUN pip install supervisor-stdout
 
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-ADD ./config/ /config/
-
-VOLUME /scripts
+# The context of docker-compose is `../` which is why we need to cd back into hydra-bc
+ADD ./hydra-bc/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD ./hydra-bc/config/ /config/
+# But it allows us to include the scripts directly
+ADD ./scripts /scripts
 
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
