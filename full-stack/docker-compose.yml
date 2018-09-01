@@ -18,6 +18,8 @@ services:
     image: oryd/hydra:$HYDRA_VERSION
     links:
       - postgresd:postgresd
+    networks:
+      - intranet
     environment:
       - LOG_LEVEL=debug
       - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
@@ -31,6 +33,8 @@ services:
       - postgresd:postgresd
     environment:
       - LOG_LEVEL=debug
+    networks:
+      - intranet
     command:
       migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
     restart: on-failure
@@ -41,6 +45,8 @@ services:
       - postgresd:postgresd
     environment:
       - LOG_LEVEL=debug
+    networks:
+      - intranet
     command:
       migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
     restart: on-failure
@@ -56,6 +62,8 @@ services:
       - hydra-migrate
     command:
       serve all --dangerous-force-http
+    networks:
+      - intranet
     environment:
       - LOG_LEVEL=debug
       - SYSTEM_SECRET=youReallyNeedToChangeThis
@@ -79,6 +87,8 @@ services:
       - keto
     command:
       serve proxy
+    networks:
+      - intranet
     environment:
       - LOG_LEVEL=debug
       - PORT=4455
@@ -105,6 +115,8 @@ services:
       - hydra-migrate
     command:
       serve api
+    networks:
+      - intranet
     environment:
       - LOG_LEVEL=debug
       - PORT=4456
@@ -129,6 +141,8 @@ services:
     depends_on:
       - hydra
       - keto-migrate
+    networks:
+      - intranet
     environment:
       - LOG_LEVEL=debug
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
@@ -138,8 +152,8 @@ services:
 
   configurator:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: full-stack/Dockerfile
       args:
         - HYDRA_VERSION=$HYDRA_VERSION
         - KETO_VERSION=$KETO_VERSION
@@ -148,8 +162,8 @@ services:
       - hydra
       - keto
       - oathkeeper-api
-    volumes:
-      - ../scripts:/scripts
+    networks:
+      - intranet
     environment:
       # All of these URLs MUST NOT end with a trailing slash. This is very important!
       - HYDRA_URL=http://hydra:4444
@@ -182,6 +196,8 @@ services:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
       - PORT=4488
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
+    networks:
+      - intranet
     ports:
       - "4488:4488"
     restart: on-failure
@@ -190,6 +206,8 @@ services:
     build:
       context: ../apps/consumer
       dockerfile: Dockerfile
+    networks:
+      - intranet
     depends_on:
       - hydra
       - keto
@@ -216,6 +234,8 @@ services:
       - hydra
       - keto
       - oathkeeper-proxy
+    networks:
+      - intranet
     ports:
       - "4478:4478"
     environment:
@@ -227,7 +247,13 @@ services:
 
   postgresd:
     image: postgres:9.6
+    networks:
+      - intranet
     environment:
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=accesscontroldb
+
+networks:
+  intranet:
+    driver: bridge

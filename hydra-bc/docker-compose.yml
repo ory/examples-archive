@@ -16,8 +16,8 @@ services:
 
   hydra-migrate:
     image: oryd/hydra:$HYDRA_VERSION
-    links:
-      - postgresd:postgresd
+    networks:
+      - intranet
     environment:
       - LOG_LEVEL=debug
       - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
@@ -37,21 +37,17 @@ services:
 
   services:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: /hydra-bc/Dockerfile
       args:
         - HYDRA_VERSION=$HYDRA_VERSION
         - KETO_VERSION=$KETO_VERSION
         - OATHKEEPER_VERSION=$OATHKEEPER_VERSION
-    links:
-      - postgresd:postgresd
-#     Uncomment the following line to use mysql instead.
-#      - mysqld:mysqld
+    networks:
+      - intranet
     depends_on:
       - hydra-migrate
       - keto-migrate
-    volumes:
-      - ../scripts:/scripts
     ports:
       - "4444:4444"
       - "4445:4445"
@@ -116,13 +112,15 @@ services:
       - HYDRA_ADMIN_URL=http://services:4445
       - NODE_TLS_REJECT_UNAUTHORIZED=0
     image: oryd/hydra-login-consent-node:$LOGIN_CONSENT_VERSION
-    links:
-      - services
+    networks:
+      - intranet
     ports:
       - "3000:3000"
     restart: unless-stopped
 
   postgresd:
+    networks:
+      - intranet
     image: postgres:9.6
     environment:
       - POSTGRES_USER=dbuser
@@ -134,3 +132,7 @@ services:
 #    image: mysql:5.7
 #    environment:
 #      - MYSQL_ROOT_PASSWORD=secret
+
+networks:
+  intranet:
+    driver: bridge
