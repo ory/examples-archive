@@ -20,21 +20,12 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 17.10.0-ce
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package-lock.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run: npm ci
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
-
       - run: make start-full-stack
-      - run: npm run test
-
+      - run: docker build -t cypress-runner -f cypress/Dockerfile .
+      - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://hydra:4445/health/ready
+      - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://oathkeeper-api:4456/health/ready
+      - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://keto:4466/health/ready
+      - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://consumer.localhost:4477/
+      - run: sleep 30
+      - run: make BROWSER_HYDRA_HOST=hydra BROWSER_CONSUMER_HOST=consumer.localhost BROWSER_IDP_HOST=identity-provider BROWSER_OATHKEEPER_PROXY_HOST=oathkeeper-proxy reset-full-stack
+      - run: docker run -e CYPRESS_OATHKEEPER_API_HOST=oathkeeper-api -e CYPRESS_KETO_HOST=keto -e CYPRESS_CONSUMER_HOST=consumer.localhost -e CYPRESS_HYDRA_ADMIN_HOST=hydra -it --network full-stack_intranet cypress-runner npm run  test:full-stack

@@ -14,6 +14,7 @@
   "token_endpoint_auth_method": "client_secret_post",
   "redirect_uris": [
     "http://localhost:4477/auth/callback",
+    "http://consumer.localhost:4477/auth/callback",
     "http://127.0.0.1:4477/auth/callback"
   ]
 }

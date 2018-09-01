@@ -2,8 +2,9 @@
   "name": "ory-examples",
   "version": "0.0.0",
   "scripts": {
-    "test:watch": "cypress open",
-    "test": "cypress run"
+    "test:watch": "cypress open cypress/integration/full-stack/*",
+    "test:full-stack": "cypress run --spec cypress/integration/full-stack/*",
+    "wait": "wait-on"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "homepage": "https://github.com/ory/examples#readme",
   "devDependencies": {
     "cypress": "^3.0.3"
+  },
+  "dependencies": {
+    "wait-on": "^2.1.0"
   }
 }
