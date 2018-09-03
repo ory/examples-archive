@@ -141,7 +141,7 @@ router.get('/articles/secure-backend-with-ory-keto-oauth2-authorization',
   checkAuthentication,
   async (req, res, next) => {
     const data = {
-      pageTitle: 'This endpoint makes requests to a server secured using OAuth 2.0 Token Introspection',
+      pageTitle: 'This endpoint makes requests to a server secured using ORY Keto Warden API',
       accessToken: req.user.accessToken, backends,
       valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
       url: backends.warden.token
