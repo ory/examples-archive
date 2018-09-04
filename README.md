@@ -84,13 +84,13 @@ in order to execute the action.
 There are different types of credentials (Cookie, JSON Web Token, OAuth 2.0 Access Token, ...) that can be used to protect
 a resource server. Therefore, the [resource server](./apps/resource-server) has several different routes:
 
-* [/introspect](./apps/resource-server/routes/introspect): This route requires that an OAuth 2.0 Access Token
+* [/introspect](./apps/resource-server/routes/introspect.js): This route requires that an OAuth 2.0 Access Token
 is included in the HTTP header ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) and uses the
 [OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) flow to validate the token.
-* [/oathkeeper](./apps/resource-server/routes/oathkeeper): This route also accepts a bearer token
+* [/oathkeeper](./apps/resource-server/routes/oathkeeper.js): This route also accepts a bearer token
 ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) but this time it has to be a JSON Web Token
 signed by ORY Oathkeeper.
-* [/warden/](./apps/resource-server/routes/warden): This route uses the ORY Keto Warden API to check if a request
+* [/warden/](./apps/resource-server/routes/warden.js): This route uses the ORY Keto Warden API to check if a request
 is allowed to perform the request. It consists of two subroutes:
   * `/warden/access-token`: This endpoint requires an OAuth 2.0 Access Token in the HTTP header
     ([`Authorization: bearer <token>`](https://tools.ietf.org/html/rfc6750)) and checks if the token's subject is allowed
