@@ -20,12 +20,11 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 17.10.0-ce
-      - run: make start-full-stack
+      - run: make BROWSER_HYDRA_HOST=hydra BROWSER_CONSUMER_HOST=consumer.localhost BROWSER_IDP_HOST=identity-provider BROWSER_OATHKEEPER_PROXY_HOST=oathkeeper-proxy start-full-stack
       - run: docker build -t cypress-runner -f cypress/Dockerfile .
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://hydra:4445/health/ready
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://oathkeeper-api:4456/health/ready
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://keto:4466/health/ready
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://consumer.localhost:4477/
-      - run: sleep 30
-      - run: make BROWSER_HYDRA_HOST=hydra BROWSER_CONSUMER_HOST=consumer.localhost BROWSER_IDP_HOST=identity-provider BROWSER_OATHKEEPER_PROXY_HOST=oathkeeper-proxy reset-full-stack
-      - run: docker run -e CYPRESS_OATHKEEPER_API_HOST=oathkeeper-api -e CYPRESS_KETO_HOST=keto -e CYPRESS_CONSUMER_HOST=consumer.localhost -e CYPRESS_HYDRA_ADMIN_HOST=hydra -it --network full-stack_intranet cypress-runner npm run  test:full-stack
+      - run: sleep 10
+      - run: docker run -e CYPRESS_OATHKEEPER_API_HOST=oathkeeper-api -e CYPRESS_KETO_HOST=keto -e CYPRESS_CONSUMER_HOST=consumer.localhost -e CYPRESS_HYDRA_ADMIN_HOST=hydra -it --network full-stack_intranet cypress-runner npm run test:full-stack
