@@ -6,9 +6,10 @@ ENV_BROWSER_CONSUMER_HOST ?= localhost
 ENV_BROWSER_IDP_HOST ?= localhost
 ENV_BROWSER_OATHKEEPER_PROXY_HOST ?= localhost
 
-ENV_HYDRA_VERSION ?= v1.0.0-beta.9
-ENV_OATHKEEPER_VESRION ?= v0.13.9_oryOS.9
-ENV_KETO_VERSION ?= v0.1.9-sandbox_oryOS.9
+ENV_HYDRA_VERSION ?= v1.0.0-rc.5_oryOS.10
+ENV_HYDRA_VERSION ?= v1.0.0-rc.5_oryOS.10
+ENV_OATHKEEPER_VESRION ?= v0.14.0_oryOS.10
+ENV_LOGIN_CONSENT_VERSION ?= v1.0.0-rc.4
 
 all:
 ifndef DOCKER_VERSION
@@ -18,7 +19,7 @@ ifndef DOCKER_COMPOSE_VERSION
     $(error "command docker-compose is not available, please install Docker")
 endif
 
-export LOGIN_CONSENT_VERSION=${ENV_HYDRA_VERSION}
+export LOGIN_CONSENT_VERSION=${ENV_LOGIN_CONSENT_VERSION}
 export HYDRA_VERSION=${ENV_HYDRA_VERSION}
 export OATHKEEPER_VERSION=${ENV_OATHKEEPER_VESRION}
 export KETO_VERSION=${ENV_KETO_VERSION}
@@ -32,20 +33,6 @@ build-dev:
 		docker build -t oryd/hydra:dev ${GOPATH}/src/github.com/ory/hydra/
 		docker build -t oryd/oathkeeper:dev ${GOPATH}/src/github.com/ory/oathkeeper/
 		docker build -t oryd/keto:dev ${GOPATH}/src/github.com/ory/keto/
-
-###
-
-start-hydra-bc:
-		cd hydra-bc; docker-compose up --build -d
-
-restart-hydra-bc:
-		cd hydra-bc; docker-compose restart
-
-rm-hydra-bc:
-		cd hydra-bc; docker-compose kill
-		cd hydra-bc; docker-compose rm -f
-
-reset-hydra-bc: rm-hydra-bc start-hydra-bc
 
 ###
 
