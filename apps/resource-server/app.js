@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const oathkeeper = require('./routes/oathkeeper');
 const introspect = require('./routes/introspect');
-const warden = require('./routes/warden');
+const keto = require('./routes/keto');
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/oathkeeper', oathkeeper);
 app.use('/introspect', introspect);
-app.use('/warden', warden);
+app.use('/keto', keto);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

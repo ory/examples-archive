@@ -99,7 +99,7 @@ services:
       - CREDENTIALS_ISSUER_ID_TOKEN_LIFESPAN=1h
       - CREDENTIALS_ISSUER_ID_TOKEN_ISSUER=http://oathkeeper-api:4456
       - CREDENTIALS_ISSUER_ID_TOKEN_JWK_REFRESH_INTERVAL=30m
-      - AUTHORIZER_KETO_WARDEN_KETO_URL=http://keto:4466
+      - AUTHORIZER_KETO_URL=http://keto:4466
       - AUTHENTICATOR_ANONYMOUS_USERNAME=anonymous
       - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
       - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
@@ -122,7 +122,7 @@ services:
       - PORT=4456
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
       - ISSUER_URL=http://$BROWSER_OATHKEEPER_PROXY_HOST:4455/
-      - AUTHORIZER_KETO_WARDEN_KETO_URL=http://keto:4466
+      - AUTHORIZER_KETO_URL=http://keto:4466
       - CREDENTIALS_ISSUER_ID_TOKEN_ALGORITHM=ory-hydra
       - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_JWK_SET_ID=resources:hydra:jwk:oathkeeper
       - CREDENTIALS_ISSUER_ID_TOKEN_HYDRA_ADMIN_URL=http://hydra:4445
@@ -147,8 +147,6 @@ services:
     environment:
       - LOG_LEVEL=debug
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
-      - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
-      - AUTHENTICATOR_OAUTH2_INTROSPECTION_URL=http://hydra:4445/oauth2/introspect
     restart: on-failure
 
   configurator:
@@ -187,8 +185,6 @@ services:
       - OATHKEEPER_HYDRA_JWK_SET_ID=jwk:oathkeeper
       - OATHKEEPER_HYDRA_CLIENT_ID=clients:oathkeeper-client
       - OATHKEEPER_HYDRA_CLIENT_SECRET=dummy-oathkeeper-secret
-      - KETO_HYDRA_CLIENT_ID=clients:keto-client
-      - KETO_HYDRA_CLIENT_SECRET=dummy-keto-secret
     restart: on-failure
 
   identity-provider:
@@ -225,8 +221,7 @@ services:
       - OAUTH2_CLIENT_SECRET=consumer-secret
       - OAUTH2_REDIRECT_URL=http://$BROWSER_CONSUMER_HOST:4477/auth/callback
       - BACKEND_OATHKEEPER_URL=http://oathkeeper-proxy:4455/oathkeeper
-      - BACKEND_WARDEN_SUBJECT_URL=http://resource-server:4478/warden/subject
-      - BACKEND_WARDEN_TOKEN_URL=http://resource-server:4478/warden/token
+      - BACKEND_WARDEN_SUBJECT_URL=http://resource-server:4478/keto/subject
       - BACKEND_INTROSPECT_URL=http://resource-server:4478/introspect
 
   resource-server:
