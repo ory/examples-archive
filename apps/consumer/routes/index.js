@@ -45,7 +45,6 @@ const backends = {
   oathkeeper: process.env.BACKEND_OATHKEEPER_URL,
   warden: {
     subject: process.env.BACKEND_WARDEN_SUBJECT_URL,
-    token: process.env.BACKEND_WARDEN_TOKEN_URL,
   },
   introspect: process.env.BACKEND_INTROSPECT_URL
 }
@@ -136,32 +135,8 @@ router.get('/articles/secure-backend-with-ory-oathkeeper',
   })
 
 // This route makes several requests to the resource server. The accessed URL at the resource server is protected
-// using the ORY Keto Warden API - and more specifically the Warden OAuth 2.0 Access Token Authorization.
-router.get('/articles/secure-backend-with-ory-keto-oauth2-authorization',
-  checkAuthentication,
-  async (req, res, next) => {
-    const data = {
-      pageTitle: 'This endpoint makes requests to a server secured using ORY Keto Warden API',
-      accessToken: req.user.accessToken, backends,
-      valid: { body: '' }, invalid: { body: '' }, empty: { body: '' },
-      url: backends.warden.token
-    }
-
-    // Let's make a request to the backend with the access token
-    await makeBearerRequest(backends.warden.token, req.user.accessToken, data.valid, next)
-
-    // Let's make a request without a token
-    await makeBearerRequest(backends.warden.token, '', data.empty, next)
-
-    // Let's make a request without a random (invalid) JSON Web Token
-    await makeBearerRequest(backends.warden.token, 'invalid-token', data.invalid, next)
-
-    res.render('articles/oauth2', data)
-  })
-
-// This route makes several requests to the resource server. The accessed URL at the resource server is protected
 // using the ORY Keto Warden API - and more specifically the Warden Subject Authorization.
-router.get('/articles/secure-backend-with-ory-keto-simple',
+router.get('/articles/secure-backend-with-ory-keto',
   // Authentication is not required here because we will use basic authentication in the requests.
   // checkAuthentication,
   async (req, res, next) => {
