@@ -8,6 +8,6 @@ describe('environment', () => {
     expect(checkApi(`${urls.oathkeeperApi}/rules`, 'id', ['resources:oathkeeper:rules:resource-server-oathkeeper'])).to.be.empty
   })
   it('should be able to fetch all the data from keto', () => {
-    expect(checkApi(`${urls.keto}/policies`, 'id', ['resources:keto:policies:peter-blog'])).to.be.empty
+    expect(checkApi(`${urls.keto}/engines/acp/ory/exact/policies`, 'id', ['resources:keto:policies:peter-blog'])).to.be.empty
   })
 })
