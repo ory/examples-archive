@@ -65,6 +65,8 @@ services:
     networks:
       - intranet
     environment:
+      - CORS_ENABLED=true
+      - CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
       - LOG_LEVEL=debug
       - SYSTEM_SECRET=youReallyNeedToChangeThis
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
@@ -118,6 +120,8 @@ services:
     networks:
       - intranet
     environment:
+      - CORS_ENABLED=true
+      - CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
       - LOG_LEVEL=debug
       - PORT=4456
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
@@ -145,6 +149,8 @@ services:
     networks:
       - intranet
     environment:
+      - CORS_ENABLED=true
+      - CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
       - LOG_LEVEL=debug
       - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
       - AUTHENTICATOR_OAUTH2_CLIENT_CREDENTIALS_TOKEN_URL=http://hydra:4444/oauth2/token
