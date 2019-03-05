@@ -16,7 +16,9 @@ describe('full-stack', () => {
     cy.get('#remember').click()
     cy.get('input[value="Allow access"]').click()
 
-    cy.get('#with').should('to.contain', `"message": "Congratulations, you gained access to this endpoint!",`)
+    cy.log(cy.get('#with'))
+
+    cy.get('#with').should('to.contain', `Congratulations`)
     cy.get('#without').should('to.contain', `{"error":{"code":401,"status":"Unauthorized","message":"Access credentials are invalid"}}`)
     cy.get('#invalid').should('to.contain', `{"error":{"code":403,"status":"Forbidden","reason":"Access token introspection says token is not active","message":"Access credentials are not sufficient to access this resource"}}`)
   })
