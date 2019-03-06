@@ -1,0 +1,11 @@
+[{
+  "id": "${KETO_RESOURCE_PREFIX}policies:policy:by:role:user",
+  "description": "This is another example policy which works together with the example consumer and resource server app.",
+  "subjects": ["user"],
+  "effect": "allow",
+  "resources": [
+      "/",
+      "/home"
+  ],
+  "actions": ["get"]
+}]
