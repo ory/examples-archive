@@ -22,6 +22,7 @@ Once you are confident that everything is loaded (you're not seeing any error me
 $ curl http://localhost:4445/clients
 $ curl http://localhost:4456/rules
 $ curl http://localhost:4466/engines/acp/ory/exact/policies
+$ curl http://localhost:4466/engines/acp/ory/exact/roles
 ```
 
 You should see the preconfigured settings and no errors.
