@@ -26,5 +26,5 @@ jobs:
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://oathkeeper-api:4456/health/ready
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://keto:4466/health/ready
       - run: docker run --rm -it --network full-stack_intranet cypress-runner npm run wait http-get://consumer.localhost:4477/
-      - run: sleep 10
+      - run: sleep 15
       - run: docker run -e CYPRESS_OATHKEEPER_API_HOST=oathkeeper-api -e CYPRESS_KETO_HOST=keto -e CYPRESS_CONSUMER_HOST=consumer.localhost -e CYPRESS_HYDRA_ADMIN_HOST=hydra -it --network full-stack_intranet cypress-runner npm run test:full-stack
