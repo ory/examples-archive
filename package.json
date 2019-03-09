@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/ory/examples#readme",
   "devDependencies": {
-    "cypress": "^3.0.3"
+    "cypress": "^3.1.5"
   },
   "dependencies": {
     "wait-on": "^2.1.0"
