@@ -8,7 +8,7 @@ boots the exemplary consumer application and resource server.
 Run this example with:
 
 ```
-$ make start-full-stack
+$ cd ..; make start-full-stack
 ```
 
 Please be patient. In the background the system will boot a PostgreSQL database, execute SQL migrations for two services, then create
