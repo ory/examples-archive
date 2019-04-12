@@ -235,7 +235,6 @@ services:
       - OATHKEEPER_KEY_URL=http://oathkeeper-api:4456/.well-known/jwks.json
       - OAUTH2_INTROSPECT_URL=http://hydra:4445/oauth2/introspect
       - KETO_URL=http://keto:4466
-      - nodemon start
 
   postgresd:
     image: postgres:9.6
