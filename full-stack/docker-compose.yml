@@ -57,7 +57,7 @@ services:
       - CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
       - LOG_LEVEL=debug
       - SYSTEM_SECRET=youReallyNeedToChangeThis
-      - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      - DSN=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
       - OAUTH2_CONSENT_URL=http://$BROWSER_IDP_HOST:4488/consent
       - OAUTH2_LOGIN_URL=http://$BROWSER_IDP_HOST:4488/login
       - OAUTH2_ISSUER_URL=http://$BROWSER_HYDRA_HOST:4444
@@ -112,7 +112,7 @@ services:
       - CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
       - LOG_LEVEL=debug
       - PORT=4456
-      - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      - DSN=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
       - ISSUER_URL=http://$BROWSER_OATHKEEPER_PROXY_HOST:4455/
       - AUTHORIZER_KETO_URL=http://keto:4466
       - CREDENTIALS_ISSUER_ID_TOKEN_ALGORITHM=ory-hydra
@@ -140,7 +140,7 @@ services:
       - CORS_ENABLED=true
       - CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
       - LOG_LEVEL=debug
-      - DATABASE_URL=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      - DSN=postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
     restart: on-failure
 
   configurator:
