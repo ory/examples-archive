@@ -2,8 +2,9 @@
 
 [![CircleCI](https://circleci.com/gh/ory/examples.svg?style=shield)](https://circleci.com/gh/ory/examples)
 
-This repository contains deployment examples and templates for the ORY Ecosystem. This repository does not contain
-examples for the [ORY Editor](https://github.com/ory/editor), but ORY Hydra, ORY Oathkeeper, and ORY Keto.
+This repository contains deployment examples and templates for the ORY Ecosystem. This repository contains
+examples [ORY Hydra](https://github.com/ory/hydra), [ORY Oathkeeper](https://github.com/ory/oathkeeper), [ORY Keto](https://github.com/ory/keto) and [Ory Hive](https://github.com/ory/hive).
+
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -68,7 +69,7 @@ The application's code has been documented, and we encourage you to read it. Ple
 Passport.js) are built on open standards such as OAuth 2.0. If you do not write applications in NodeJS you will be able
 to find SDKs with similar functionality in other languages.
 
-Please note that the code is making use of some [ES6 features](oauth2.jade), such as arrow functions, as well as
+Please note that the code is making use of some [ES6 features](https://github.com/rse/es6-features/) including [Jade templates](oauth2.jade), such as arrow functions, as well as
 async/await. Additionally, don't be fooled by ~100 Lines of Code. We packed everything in one file so you have a better
 time navigating the source code. The most interesting files will be the ones contained in the `routes` directory.
 All other files are either boilerplate ExpressJS or HTML views, with minimal changes to the ExpressJS middleware
@@ -77,11 +78,11 @@ in each respective `./app.js` file.
 ### Resource Server
 
 A resource server is an application that, for example, exposes a CRUD API for modifying blog articles.
-Resource servers are usually protected - you don't want a hacker to be able to delete all your blog articles -
-and require valid credentials (authentication) as well as a certain permission (e.g. alice is allowed to modify this article)
-in order to execute the action.
+Resource servers are usually protected - so a hacker cannot delete all your blog articles -
+and require valid authentication credentials as well as a certain permission for example "Alice is allowed to modify this article."
+in order to execute the desired action.
 
-There are different types of credentials (Cookie, JSON Web Token, OAuth 2.0 Access Token, ...) that can be used to protect
+There are different types of credentials: Cookie, JSON Web Token, OAuth 2.0 Access Token, etc., that can protect
 a resource server. Therefore, the [resource server](./apps/resource-server) has several different routes:
 
 * [/introspect](./apps/resource-server/routes/introspect.js): This route requires that an OAuth 2.0 Access Token
