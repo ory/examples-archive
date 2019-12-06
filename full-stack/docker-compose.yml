@@ -12,7 +12,7 @@ services:
       - LOG_LEVEL=debug
       - HYDRA_SYSTEM_SECRET=youReallyNeedToChangeThis
     command:
-      migrate sql postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
+      migrate sql --yes postgres://dbuser:secret@postgresd:5432/accesscontroldb?sslmode=disable
     restart: on-failure
 
   keto-migrate:
